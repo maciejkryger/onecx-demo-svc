@@ -1,0 +1,13 @@
+app:
+  name: svc
+image:
+  repository: "onecx/onecx-demo-svc"
+  tag: "latest"
+
+db:
+  enabled: true
+
+microservice:
+  spec:
+    name: onecx-demo-svc
+    description: OneCX Backend Service

@@ -1,0 +1,23 @@
+openapi: 3.0.3
+info:
+  title: onecx-demo-svc internal API
+  version: 1.0.0
+servers:
+ -
+  url: /api
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.simple.api/token
+          scopes:
+            ocx-demo:all: Grants access to all operations
+            ocx-demo:read: Grants read access
+            ocx-demo:write: Grants write access
+            ocx-demo:delete: Grants access to delete operations
+  schemas: {
+    }
+paths: {
+  }

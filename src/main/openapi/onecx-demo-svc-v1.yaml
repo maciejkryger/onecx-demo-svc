@@ -1,0 +1,150 @@
+openapi: 3.0.3
+info:
+  title: onecx-demo-svc API
+  version: 1.0.0
+servers:
+ -
+  url: /api
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.simple.api/token
+          scopes:
+            ocx-demo:all: Grants access to all operations
+            ocx-demo:read: Grants read access
+            ocx-demo:write: Grants write access
+            ocx-demo:delete: Grants access to delete operations
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          format: int64
+          type: integer
+        name:
+          type: string
+        price:
+          format: double
+          type: number
+paths:
+  /v1/products:
+    get:
+      tags:
+       - products
+      operationId: getAllProducts
+      summary: Get all products
+      security:
+       -
+        oauth2:
+         - ocx-demo:read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+          description: List of products
+    post:
+      tags:
+       - products
+      operationId: createProduct
+      summary: Create Product
+      security:
+       -
+        oauth2:
+         - ocx-demo:write
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: Product created
+  /v1/products/{id}:
+    get:
+      tags:
+       - products
+      operationId: getProductById
+      summary: Get Product by ID
+      security:
+       -
+        oauth2:
+         - ocx-demo:read
+      parameters:
+       -
+        required: true
+        in: path
+        name: id
+        schema:
+          format: int64
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: Product found
+        '404':
+          description: Product not found
+    put:
+      tags:
+       - products
+      operationId: updateProduct
+      summary: Update Product
+      security:
+       -
+        oauth2:
+         - ocx-demo:write
+      parameters:
+       -
+        required: true
+        in: path
+        name: id
+        schema:
+          format: int64
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: Product updated
+    delete:
+      tags:
+       - products
+      operationId: deleteProduct
+      summary: Delete Product
+      security:
+       -
+        oauth2:
+         - ocx-demo:delete
+      parameters:
+       -
+        required: true
+        in: path
+        name: id
+        schema:
+          format: int64
+          type: integer
+      responses:
+        '204':
+          description: Product deleted
