@@ -8,10 +8,10 @@ h| Documentation
 h| Configuration
 h| Version
 
-| onecx-permissions
+| onecx-tenant
 
-| https://onecx.github.io/docs/onecx-quarkus/current/onecx-quarkus/onecx-permissions.html[Link]
-| https://github.com/onecx/onecx-quarkus/blob/2.4.0/docs/modules/onecx-quarkus/pages/includes/onecx-permissions.adoc[Link]
+| https://onecx.github.io/docs/onecx-quarkus/current/onecx-quarkus/onecx-tenant.html[Link]
+| https://github.com/onecx/onecx-quarkus/blob/2.4.0/docs/modules/onecx-quarkus/pages/includes/onecx-tenant.adoc[Link]
 | 2.4.0
 
 | tkit-quarkus-rest
@@ -140,12 +140,6 @@ h| Version
 | https://github.com/quarkusio/quarkusio.github.io/blob/develop/_generated-doc/latest/config/quarkus-container-image-docker.adoc[Link]
 | 3.27.1
 
-
-| quarkus-hibernate-orm-panache
-
-| 
-| 
-| 3.27.1
 
 
 |===

@@ -1,11 +1,7 @@
 package org.tkit.onecx.demo.domain.models;
 
-import java.math.BigDecimal;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import org.tkit.quarkus.jpa.models.TraceableEntity;
@@ -17,23 +13,18 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "product")
+@Table(name = "category")
 @Getter
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Product extends TraceableEntity {
+public class Category extends TraceableEntity {
 
     @Column(name = "tenant")
     private String tenant;
 
     @Column(name = "name")
     private String name;
-    @Column(name = "price")
-    private BigDecimal price;
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private org.tkit.onecx.demo.domain.models.Category category;
 
 }

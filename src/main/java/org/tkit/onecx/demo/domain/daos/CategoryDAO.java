@@ -10,33 +10,30 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
-import org.tkit.onecx.demo.domain.models.Product;
+import org.tkit.onecx.demo.domain.models.Category;
 import org.tkit.quarkus.jpa.daos.AbstractDAO;
 
-import gen.org.tkit.onecx.demo.rs.internal.model.ProductSearchCriteriaDTO;
+import gen.org.tkit.onecx.demo.rs.internal.model.CategorySearchCriteriaDTO;
 
 @ApplicationScoped
-public class ProductDAO extends AbstractDAO<Product> {
+public class CategoryDAO extends AbstractDAO<Category> {
 
-    public List<Product> findByCriteria(ProductSearchCriteriaDTO criteria, Integer offset, Integer limit) {
+    public List<Category> findByCriteria(CategorySearchCriteriaDTO criteria, Integer offset, Integer limit) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-        CriteriaQuery<Product> cq = cb.createQuery(Product.class);
-        Root<Product> root = cq.from(Product.class);
+        CriteriaQuery<Category> cq = cb.createQuery(Category.class);
+        Root<Category> root = cq.from(Category.class);
 
         List<Predicate> predicates = new ArrayList<>();
 
         if (criteria != null && criteria.getName() != null && !criteria.getName().isBlank()) {
             predicates.add(cb.like(cb.lower(root.get("name")), "%" + criteria.getName().toLowerCase() + "%"));
         }
-        if (criteria != null && criteria.getPrice() != null) {
-            predicates.add(cb.equal(root.get("price"), criteria.getPrice()));
-        }
 
         if (!predicates.isEmpty()) {
             cq.where(predicates.toArray(new Predicate[0]));
         }
 
-        TypedQuery<Product> query = getEntityManager().createQuery(cq);
+        TypedQuery<Category> query = getEntityManager().createQuery(cq);
 
         if (offset != null && offset >= 0) {
             query.setFirstResult(offset);
