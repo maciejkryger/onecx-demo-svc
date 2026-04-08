@@ -6,51 +6,10 @@ servers:
  -
   url: /api
 paths:
-  /internal/products:
-    post:
-      tags:
-       - productsInternal
-      operationId: createProduct
-      summary: Create Product
-      security:
-       -
-        oauth2:
-         - ocx-demo:write
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Product'
-        required: true
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-          description: Product created
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Validation failed
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Constraint conflict
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Internal server error
-  /internal/products/{id}:
+  /v1/products/{id}:
     get:
       tags:
-       - productsInternal
+       - products
       operationId: getProductById
       summary: Get Product by ID
       security:
@@ -89,106 +48,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
           description: Internal server error
-    put:
-      tags:
-       - productsInternal
-      operationId: updateProduct
-      summary: Update Product
-      security:
-       -
-        oauth2:
-         - ocx-demo:write
-      parameters:
-       -
-        name: id
-        schema:
-          type: string
-        required: true
-        in: path
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Product'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-          description: Product updated
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Validation failed
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Product not found
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Optimistic lock conflict
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Internal server error
-    delete:
-      tags:
-       - productsInternal
-      operationId: deleteProduct
-      summary: Delete Product
-      security:
-       -
-        oauth2:
-         - ocx-demo:delete
-      parameters:
-       -
-        name: id
-        schema:
-          type: string
-        required: true
-        in: path
-      responses:
-        '204':
-          description: Product deleted
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Invalid request
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Product not found
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Constraint conflict
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Internal server error
-  /internal/products/search:
+  /v1/products/search:
     post:
       tags:
-       - productsInternal
+       - products
       operationId: searchProducts
       summary: Search products
       security:

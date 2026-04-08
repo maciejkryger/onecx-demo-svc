@@ -2,13 +2,16 @@ package org.tkit.onecx.demo.rs.external.v1.mappers;
 
 import org.mapstruct.Mapper;
 import org.tkit.onecx.demo.domain.models.Product;
+import org.tkit.quarkus.rs.mappers.OffsetDateTimeMapper;
 
-import gen.org.tkit.onecx.demo.rs.external.v1.model.ProductDTO;
+import gen.org.tkit.onecx.demo.rs.external.v1.model.ProductDTOV1;
+import gen.org.tkit.onecx.demo.rs.external.v1.model.ProductSearchCriteriaDTOV1;
+import gen.org.tkit.onecx.demo.rs.internal.model.ProductSearchCriteriaDTO;
 
-@Mapper(componentModel = "jakarta")
+@Mapper(uses = { OffsetDateTimeMapper.class })
 public interface ProductMapper {
 
-    ProductDTO toDto(Product entity);
+    ProductDTOV1 toDto(Product entity);
 
-    Product fromDto(ProductDTO dto);
+    ProductSearchCriteriaDTO toCriteria(ProductSearchCriteriaDTOV1 criteria);
 }

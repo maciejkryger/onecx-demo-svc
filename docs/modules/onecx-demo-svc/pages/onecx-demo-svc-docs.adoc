@@ -18,6 +18,7 @@ quarkus.http.auth.permission.health.paths=/q/*
 quarkus.http.auth.permission.health.policy=permit
 quarkus.http.auth.permission.default.paths=/*
 quarkus.http.auth.permission.default.policy=authenticated
+// for development, you can use the following configuration to disable authentication and authorization
 quarkus.banner.enabled=false
 quarkus.hibernate-orm.database.generation=validate
 quarkus.hibernate-orm.multitenant=DISCRIMINATOR
@@ -48,16 +49,14 @@ include::onecx-demo-svc-extensions.adoc[opts=optional]
 ----
 app:
   name: svc
-image:
-  repository: "onecx/onecx-demo-svc"
-  tag: "latest"
+  image:
+    repository: "onecx/onecx-demo-svc"
+  db:
+    enabled: true
 
-db:
-  enabled: true
-
-microservice:
-  spec:
-    name: onecx-demo-svc
-    description: OneCX Backend Service
-
+operator:
+  microservice:
+    spec:
+      name: "onecx-demo-svc"
+      description: "OneCX backend service"
 ----

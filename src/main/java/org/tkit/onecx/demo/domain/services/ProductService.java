@@ -7,8 +7,14 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
+import org.tkit.onecx.demo.domain.daos.CategoryDAO;
 import org.tkit.onecx.demo.domain.daos.ProductDAO;
+import org.tkit.onecx.demo.domain.models.Category;
 import org.tkit.onecx.demo.domain.models.Product;
+import org.tkit.onecx.demo.rs.internal.mappers.ProductMapper;
+
+import gen.org.tkit.onecx.demo.rs.internal.model.ProductDTO;
+import gen.org.tkit.onecx.demo.rs.internal.model.ProductSearchCriteriaDTO;
 
 @ApplicationScoped
 public class ProductService {
@@ -16,11 +22,17 @@ public class ProductService {
     @Inject
     ProductDAO dao;
 
-    public List<Product> listAll() {
-        return dao.listAll();
+    @Inject
+    ProductMapper mapper;
+
+    @Inject
+    CategoryDAO categoryDAO;
+
+    public List<Product> findByCriteria(ProductSearchCriteriaDTO criteria, Integer offset, Integer limit) {
+        return dao.findByCriteria(criteria, offset, limit);
     }
 
-    public Product findById(Long id) {
+    public Product findById(String id) {
         Product entity = dao.findById(id);
         if (entity == null) {
             throw new NoSuchElementException("Product not found: " + id);
@@ -29,20 +41,42 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(Product entity) {
-        dao.persist(entity);
+    public Product create(ProductDTO dto) {
+        Product entity = mapper.fromDto(dto);
+        if (dto.getCategory() != null) {
+            if (dto.getCategory().getId() != null && !dto.getCategory().getId().isBlank()) {
+                Category resolvedCategory = categoryDAO.findById(dto.getCategory().getId());
+                entity.setCategory(resolvedCategory);
+            } else {
+                Category resolvedCategory = mapper.fromDto(dto.getCategory());
+                categoryDAO.create(resolvedCategory);
+                entity.setCategory(resolvedCategory);
+            }
+        }
+        dao.create(entity);
         return entity;
     }
 
     @Transactional
-    public Product update(Long id, Product entity) {
-        findById(id);
-        entity.setId(id);
-        return dao.getEntityManager().merge(entity);
+    public Product update(String id, ProductDTO dto) {
+        Product entity = findById(id);
+        mapper.update(dto, entity);
+        if (dto.getCategory() != null) {
+            if (dto.getCategory().getId() != null && !dto.getCategory().getId().isBlank()) {
+                Category resolvedCategory = categoryDAO.findById(dto.getCategory().getId());
+                entity.setCategory(resolvedCategory);
+            } else {
+                Category resolvedCategory = mapper.fromDto(dto.getCategory());
+                categoryDAO.create(resolvedCategory);
+                entity.setCategory(resolvedCategory);
+            }
+        }
+        return dao.update(entity);
     }
 
     @Transactional
-    public void delete(Long id) {
-        dao.deleteById(id);
+    public void delete(String id) {
+        Product entity = findById(id);
+        dao.delete(entity);
     }
 }

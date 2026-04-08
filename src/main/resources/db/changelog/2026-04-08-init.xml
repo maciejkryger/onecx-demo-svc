@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+           http://www.liquibase.org/xml/ns/dbchangelog
+           https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-category" author="onecx-svc-generator">
+        <createTable tableName="category">
+            <column name="GUID" type="VARCHAR(36)">
+                <constraints primaryKey="true" primaryKeyName="pk_category" nullable="false"/>
+            </column>
+            <column name="creationDate" type="TIMESTAMP"/>
+            <column name="creationUser" type="VARCHAR(255)"/>
+            <column name="modificationDate" type="TIMESTAMP"/>
+            <column name="modificationUser" type="VARCHAR(255)"/>
+            <column name="OPTLOCK" type="BIGINT"/>
+            <column name="tenant" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-product" author="onecx-svc-generator">
+        <createTable tableName="product">
+            <column name="GUID" type="VARCHAR(36)">
+                <constraints primaryKey="true" primaryKeyName="pk_product" nullable="false"/>
+            </column>
+            <column name="creationDate" type="TIMESTAMP"/>
+            <column name="creationUser" type="VARCHAR(255)"/>
+            <column name="modificationDate" type="TIMESTAMP"/>
+            <column name="modificationUser" type="VARCHAR(255)"/>
+            <column name="OPTLOCK" type="BIGINT"/>
+            <column name="tenant" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="price" type="NUMERIC(19,2)"/>
+            <column name="category_id" type="VARCHAR(36)"/>
+        </createTable>
+    </changeSet>
+
+
+</databaseChangeLog>
