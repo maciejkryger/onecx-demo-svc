@@ -35,6 +35,7 @@ public interface ProductMapper {
     @Mapping(target = "persisted", ignore = true)
     void update(ProductDTO dto, @MappingTarget Product entity);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "tenant", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
     @Mapping(target = "creationUser", ignore = true)
@@ -45,6 +46,7 @@ public interface ProductMapper {
     @Mapping(target = "persisted", ignore = true)
     org.tkit.onecx.demo.domain.models.Category fromDto(gen.org.tkit.onecx.demo.rs.internal.model.CategoryDTO dto);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "tenant", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
     @Mapping(target = "creationUser", ignore = true)

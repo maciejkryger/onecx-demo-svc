@@ -60,10 +60,10 @@ paths:
       parameters:
        -
         name: id
+        in: path
+        required: true
         schema:
           type: string
-        required: true
-        in: path
       responses:
         '200':
           content:
@@ -101,10 +101,10 @@ paths:
       parameters:
        -
         name: id
+        in: path
+        required: true
         schema:
           type: string
-        required: true
-        in: path
       requestBody:
         content:
           application/json:
@@ -154,10 +154,10 @@ paths:
       parameters:
        -
         name: id
+        in: path
+        required: true
         schema:
           type: string
-        required: true
-        in: path
       responses:
         '204':
           description: Product deleted
@@ -211,9 +211,9 @@ paths:
           content:
             application/json:
               schema:
+                type: array
                 items:
                   $ref: '#/components/schemas/Product'
-                type: array
           description: Search result for products
         '400':
           content:
@@ -308,8 +308,8 @@ components:
         name:
           type: string
         price:
-          format: double
           type: number
+          format: double
         category:
           $ref: '#/components/schemas/Category'
     ProductSearchCriteria:
@@ -318,5 +318,5 @@ components:
         name:
           type: string
         price:
-          format: double
           type: number
+          format: double
