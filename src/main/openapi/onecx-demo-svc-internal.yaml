@@ -10,131 +10,73 @@ paths:
     post:
       tags:
        - productsInternal
-      security:
-       -
-        oauth2:
-         - ocx-demo:write
+      description: Create Product
       operationId: createProduct
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Product'
-        required: true
       responses:
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Validation failed
         '201':
+          description: Product created
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
-          description: Product created
-      summary: Create Product
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+      security:
+       -
+        oauth2:
+         - ocx-demo:all
+         - ocx-demo:write
   /internal/products/{id}:
     get:
       tags:
        - productsInternal
-      security:
-       -
-        oauth2:
-         - ocx-demo:read
+      description: Get Product by ID
       operationId: getProductById
+      parameters:
+       -
+        name: id
+        schema:
+          type: string
+        required: true
+        in: path
       responses:
         '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
           description: Product found
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Invalid request
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Product not found
-      parameters:
-       -
-        name: id
-        schema:
-          type: string
-        required: true
-        in: path
-      summary: Get Product by ID
-    delete:
-      tags:
-       - productsInternal
-      security:
-       -
-        oauth2:
-         - ocx-demo:delete
-      operationId: deleteProduct
-      responses:
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Product not found
-        '204':
-          description: Product deleted
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Invalid request
-      parameters:
-       -
-        name: id
-        schema:
-          type: string
-        required: true
-        in: path
-      summary: Delete Product
-    put:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Product'
-        required: true
-      security:
-       -
-        oauth2:
-         - ocx-demo:write
-      tags:
-       - productsInternal
-      responses:
-        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
-          description: Product updated
         '400':
+          description: Invalid request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Validation failed
         '404':
+          description: Product not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Product not found
-      summary: Update Product
+      security:
+       -
+        oauth2:
+         - ocx-demo:all
+         - ocx-demo:read
+    put:
+      tags:
+       - productsInternal
+      description: Update Product
       operationId: updateProduct
       parameters:
        -
@@ -143,37 +85,100 @@ paths:
           type: string
         required: true
         in: path
-  /internal/products/search:
-    post:
-      tags:
-       - productsInternal
-      security:
-       -
-        oauth2:
-         - ocx-demo:read
-      operationId: searchProducts
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProductSearchCriteria'
-        required: false
+              $ref: '#/components/schemas/Product'
       responses:
+        '200':
+          description: Product updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
         '400':
+          description: Validation failed
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Validation failed
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+      security:
+       -
+        oauth2:
+         - ocx-demo:all
+         - ocx-demo:write
+    delete:
+      tags:
+       - productsInternal
+      description: Delete Product
+      operationId: deleteProduct
+      parameters:
+       -
+        name: id
+        schema:
+          type: string
+        required: true
+        in: path
+      responses:
+        '204':
+          description: Product deleted
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+      security:
+       -
+        oauth2:
+         - ocx-demo:all
+         - ocx-demo:delete
+  /internal/products/search:
+    post:
+      tags:
+       - productsInternal
+      description: Search products
+      operationId: searchProducts
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductSearchCriteria'
+      responses:
         '200':
+          description: Search result for products
           content:
             application/json:
               schema:
                 items:
                   $ref: '#/components/schemas/Product'
                 type: array
-          description: Search result for products
-      summary: Search products
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+      security:
+       -
+        oauth2:
+         - ocx-demo:all
+         - ocx-demo:read
 components:
   securitySchemes:
     oauth2:
@@ -227,10 +232,10 @@ components:
       type: object
       properties:
         pageNumber:
-          description: The number of page.
           type: integer
           default: 0
           format: int32
+          description: The number of page.
         pageSize:
           default: 100
           format: int32
@@ -255,10 +260,10 @@ components:
       type: object
       properties:
         pageNumber:
-          description: The number of page.
           type: integer
           default: 0
           format: int32
+          description: The number of page.
         pageSize:
           default: 100
           format: int32
