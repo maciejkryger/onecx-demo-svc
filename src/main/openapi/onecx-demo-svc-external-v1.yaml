@@ -39,10 +39,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
       security:
-       -
-        oauth2:
-         - ocx-demo:all
-         - ocx-demo:read
+       - oauth2: [ ocx-demo:all, ocx-demo:read ]
   /v1/products/search:
     post:
       tags:
@@ -71,10 +68,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
       security:
-       -
-        oauth2:
-         - ocx-demo:all
-         - ocx-demo:read
+       - oauth2: [ ocx-demo:all, ocx-demo:read ]
 components:
   securitySchemes:
     oauth2:
