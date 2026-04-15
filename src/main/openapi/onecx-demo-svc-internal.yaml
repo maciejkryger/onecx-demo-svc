@@ -32,10 +32,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
       security:
-       -
-        oauth2:
-         - ocx-demo:all
-         - ocx-demo:write
+       - oauth2: [ ocx-demo:all, ocx-demo:write ]
   /internal/products/{id}:
     get:
       tags:
@@ -69,10 +66,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
       security:
-       -
-        oauth2:
-         - ocx-demo:all
-         - ocx-demo:read
+       - oauth2: [ ocx-demo:all, ocx-demo:read ]
     put:
       tags:
        - productsInternal
@@ -111,10 +105,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
       security:
-       -
-        oauth2:
-         - ocx-demo:all
-         - ocx-demo:write
+       - oauth2: [ ocx-demo:all, ocx-demo:write ]
     delete:
       tags:
        - productsInternal
@@ -143,10 +134,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
       security:
-       -
-        oauth2:
-         - ocx-demo:all
-         - ocx-demo:delete
+       - oauth2: [ ocx-demo:all, ocx-demo:delete ]
   /internal/products/search:
     post:
       tags:
@@ -175,10 +163,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
       security:
-       -
-        oauth2:
-         - ocx-demo:all
-         - ocx-demo:read
+       - oauth2: [ ocx-demo:all, ocx-demo:read ]
 components:
   securitySchemes:
     oauth2:
