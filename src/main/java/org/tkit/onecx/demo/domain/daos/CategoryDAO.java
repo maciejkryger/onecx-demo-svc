@@ -18,7 +18,7 @@ import gen.org.tkit.onecx.demo.rs.internal.model.CategorySearchCriteriaDTO;
 @ApplicationScoped
 public class CategoryDAO extends AbstractDAO<Category> {
 
-    public List<Category> findByCriteria(CategorySearchCriteriaDTO criteria, Integer offset, Integer limit) {
+    public List<Category> findByCriteria(CategorySearchCriteriaDTO criteria) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Category> cq = cb.createQuery(Category.class);
         Root<Category> root = cq.from(Category.class);
@@ -35,12 +35,23 @@ public class CategoryDAO extends AbstractDAO<Category> {
 
         TypedQuery<Category> query = getEntityManager().createQuery(cq);
 
-        if (offset != null && offset >= 0) {
-            query.setFirstResult(offset);
+        int pageNumber = criteria.getPageNumber() != null ? criteria.getPageNumber() : 0;
+        int pageSize = criteria.getPageSize() != null ? criteria.getPageSize() : 100;
+
+        if (pageNumber < 0) {
+            pageNumber = 0;
         }
-        if (limit != null && limit > 0) {
-            query.setMaxResults(limit);
+        if (pageSize <= 0) {
+            pageSize = 100;
         }
+        if (pageSize > 1000) {
+            pageSize = 1000;
+        }
+
+        int offset = pageNumber * pageSize;
+
+        query.setFirstResult(offset);
+        query.setMaxResults(pageSize);
 
         return query.getResultList();
     }

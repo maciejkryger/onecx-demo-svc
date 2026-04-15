@@ -18,7 +18,7 @@ import gen.org.tkit.onecx.demo.rs.internal.model.ProductSearchCriteriaDTO;
 @ApplicationScoped
 public class ProductDAO extends AbstractDAO<Product> {
 
-    public List<Product> findByCriteria(ProductSearchCriteriaDTO criteria, Integer offset, Integer limit) {
+    public List<Product> findByCriteria(ProductSearchCriteriaDTO criteria) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Product> cq = cb.createQuery(Product.class);
         Root<Product> root = cq.from(Product.class);
@@ -38,12 +38,23 @@ public class ProductDAO extends AbstractDAO<Product> {
 
         TypedQuery<Product> query = getEntityManager().createQuery(cq);
 
-        if (offset != null && offset >= 0) {
-            query.setFirstResult(offset);
+        int pageNumber = criteria.getPageNumber() != null ? criteria.getPageNumber() : 0;
+        int pageSize = criteria.getPageSize() != null ? criteria.getPageSize() : 100;
+
+        if (pageNumber < 0) {
+            pageNumber = 0;
         }
-        if (limit != null && limit > 0) {
-            query.setMaxResults(limit);
+        if (pageSize <= 0) {
+            pageSize = 100;
         }
+        if (pageSize > 1000) {
+            pageSize = 1000;
+        }
+
+        int offset = pageNumber * pageSize;
+
+        query.setFirstResult(offset);
+        query.setMaxResults(pageSize);
 
         return query.getResultList();
     }

@@ -28,8 +28,8 @@ public class ProductService {
     @Inject
     CategoryDAO categoryDAO;
 
-    public List<Product> findByCriteria(ProductSearchCriteriaDTO criteria, Integer offset, Integer limit) {
-        return dao.findByCriteria(criteria, offset, limit);
+    public List<Product> findByCriteria(ProductSearchCriteriaDTO criteria) {
+        return dao.findByCriteria(criteria);
     }
 
     public Product findById(String id) {

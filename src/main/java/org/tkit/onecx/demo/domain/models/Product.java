@@ -8,29 +8,25 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import org.hibernate.annotations.TenantId;
 import org.tkit.quarkus.jpa.models.TraceableEntity;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Table(name = "product")
 @Getter
 @Setter
-@NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
 public class Product extends TraceableEntity {
 
-    @Column(name = "tenant")
-    private String tenant;
+    @TenantId
+    @Column(name = "TENANT_ID")
+    private String tenantId;
 
-    @Column(name = "name")
+    @Column(name = "NAME")
     private String name;
-    @Column(name = "price")
+    @Column(name = "PRICE")
     private BigDecimal price;
     @ManyToOne
     @JoinColumn(name = "category_id")
