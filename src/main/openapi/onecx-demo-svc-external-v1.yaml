@@ -14,11 +14,11 @@ paths:
       operationId: getProductById
       parameters:
        -
+        name: id
+        in: path
         required: true
         schema:
           type: string
-        name: id
-        in: path
       responses:
         '200':
           description: Product found
@@ -58,9 +58,9 @@ paths:
           content:
             application/json:
               schema:
+                type: array
                 items:
                   $ref: '#/components/schemas/Product'
-                type: array
         '400':
           description: Validation failed
           content:
@@ -122,16 +122,16 @@ components:
       type: object
       properties:
         pageNumber:
-          format: int32
-          default: 0
           type: integer
           description: The number of page.
+          format: int32
+          default: 0
         pageSize:
+          format: int32
+          default: 100
           description: The size of page
           maximum: 1000
           type: integer
-          format: int32
-          default: 100
         name:
           type: string
     Product:
@@ -142,26 +142,26 @@ components:
         name:
           type: string
         price:
-          format: double
           type: number
+          format: double
         category:
           $ref: '#/components/schemas/Category'
     ProductSearchCriteria:
       type: object
       properties:
         pageNumber:
-          format: int32
-          default: 0
           type: integer
           description: The number of page.
+          format: int32
+          default: 0
         pageSize:
+          format: int32
+          default: 100
           description: The size of page
           maximum: 1000
           type: integer
-          format: int32
-          default: 100
         name:
           type: string
         price:
-          format: double
           type: number
+          format: double
