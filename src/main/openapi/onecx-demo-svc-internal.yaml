@@ -44,10 +44,10 @@ paths:
       operationId: getProductById
       parameters:
        -
-        name: id
+        required: true
         schema:
           type: string
-        required: true
+        name: id
         in: path
       responses:
         '200':
@@ -80,10 +80,10 @@ paths:
       operationId: updateProduct
       parameters:
        -
-        name: id
+        required: true
         schema:
           type: string
-        required: true
+        name: id
         in: path
       requestBody:
         required: true
@@ -122,10 +122,10 @@ paths:
       operationId: deleteProduct
       parameters:
        -
-        name: id
+        required: true
         schema:
           type: string
-        required: true
+        name: id
         in: path
       responses:
         '204':
@@ -232,16 +232,16 @@ components:
       type: object
       properties:
         pageNumber:
-          type: integer
-          default: 0
           format: int32
+          default: 0
+          type: integer
           description: The number of page.
         pageSize:
-          default: 100
-          format: int32
-          type: integer
-          maximum: 1000
           description: The size of page
+          maximum: 1000
+          type: integer
+          format: int32
+          default: 100
         name:
           type: string
     Product:
@@ -260,16 +260,16 @@ components:
       type: object
       properties:
         pageNumber:
-          type: integer
-          default: 0
           format: int32
+          default: 0
+          type: integer
           description: The number of page.
         pageSize:
-          default: 100
-          format: int32
-          type: integer
-          maximum: 1000
           description: The size of page
+          maximum: 1000
+          type: integer
+          format: int32
+          default: 100
         name:
           type: string
         price:
