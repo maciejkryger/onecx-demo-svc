@@ -51,10 +51,15 @@ app:
     repository: "onecx/onecx-demo-svc"
   db:
     enabled: true
-
-operator:
-  microservice:
-    spec:
-      name: "onecx-demo-svc"
-      description: "OneCX backend service"
+  operator:
+    keycloak:
+      client:
+        enabled: true
+        spec:
+          kcConfig:
+            defaultClientScopes: [ ocx-demo:read ]
+    microservice:
+      spec:
+        description: "OneCX backend service"
+        name: "onecx-demo-svc"
 ----

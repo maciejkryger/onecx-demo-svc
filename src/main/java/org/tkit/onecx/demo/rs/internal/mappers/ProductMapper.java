@@ -14,7 +14,7 @@ public interface ProductMapper {
     ProductDTO toDto(Product entity);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "tenant", ignore = true)
+    @Mapping(target = "tenantId", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
     @Mapping(target = "creationUser", ignore = true)
     @Mapping(target = "modificationDate", ignore = true)
@@ -25,7 +25,7 @@ public interface ProductMapper {
     Product fromDto(ProductDTO dto);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "tenant", ignore = true)
+    @Mapping(target = "tenantId", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
     @Mapping(target = "creationUser", ignore = true)
     @Mapping(target = "modificationDate", ignore = true)
@@ -36,7 +36,7 @@ public interface ProductMapper {
     void update(ProductDTO dto, @MappingTarget Product entity);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "tenant", ignore = true)
+    @Mapping(target = "tenantId", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
     @Mapping(target = "creationUser", ignore = true)
     @Mapping(target = "modificationDate", ignore = true)
@@ -47,7 +47,7 @@ public interface ProductMapper {
     org.tkit.onecx.demo.domain.models.Category fromDto(gen.org.tkit.onecx.demo.rs.internal.model.CategoryDTO dto);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "tenant", ignore = true)
+    @Mapping(target = "tenantId", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
     @Mapping(target = "creationUser", ignore = true)
     @Mapping(target = "modificationDate", ignore = true)

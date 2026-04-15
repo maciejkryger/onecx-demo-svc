@@ -10,19 +10,11 @@ paths:
     get:
       tags:
        - products
-      operationId: getProductById
-      summary: Get Product by ID
       security:
        -
         oauth2:
          - ocx-demo:read
-      parameters:
-       -
-        name: id
-        in: path
-        required: true
-        schema:
-          type: string
+      operationId: getProductById
       responses:
         '200':
           content:
@@ -42,27 +34,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
           description: Product not found
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Internal server error
+      parameters:
+       -
+        name: id
+        schema:
+          type: string
+        required: true
+        in: path
+      summary: Get Product by ID
   /v1/products/search:
     post:
       tags:
        - products
-      operationId: searchProducts
-      summary: Search products
       security:
        -
         oauth2:
          - ocx-demo:read
-      parameters:
-       -
-        $ref: '#/components/parameters/limit'
-       -
-        $ref: '#/components/parameters/offset'
+      operationId: searchProducts
       requestBody:
         content:
           application/json:
@@ -70,26 +58,21 @@ paths:
               $ref: '#/components/schemas/ProductSearchCriteria'
         required: false
       responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Product'
-          description: Search result for products
         '400':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
           description: Validation failed
-        '500':
+        '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Internal server error
+                items:
+                  $ref: '#/components/schemas/Product'
+                type: array
+          description: Search result for products
+      summary: Search products
 components:
   securitySchemes:
     oauth2:
@@ -102,25 +85,6 @@ components:
             ocx-demo:read: Grants read access
             ocx-demo:write: Grants write access
             ocx-demo:delete: Grants access to delete operations
-  parameters:
-    limit:
-      in: query
-      name: limit
-      required: false
-      schema:
-        type: integer
-        format: int32
-        minimum: 1
-      description: Maximum number of items to return
-    offset:
-      in: query
-      name: offset
-      required: false
-      schema:
-        type: integer
-        format: int32
-        minimum: 0
-      description: Number of items to skip before starting to collect the result set
   schemas:
     ProblemDetailParam:
       type: object
@@ -161,6 +125,17 @@ components:
     CategorySearchCriteria:
       type: object
       properties:
+        pageNumber:
+          description: The number of page.
+          type: integer
+          default: 0
+          format: int32
+        pageSize:
+          default: 100
+          format: int32
+          type: integer
+          maximum: 1000
+          description: The size of page
         name:
           type: string
     Product:
@@ -171,15 +146,26 @@ components:
         name:
           type: string
         price:
-          type: number
           format: double
+          type: number
         category:
           $ref: '#/components/schemas/Category'
     ProductSearchCriteria:
       type: object
       properties:
+        pageNumber:
+          description: The number of page.
+          type: integer
+          default: 0
+          format: int32
+        pageSize:
+          default: 100
+          format: int32
+          type: integer
+          maximum: 1000
+          description: The size of page
         name:
           type: string
         price:
-          type: number
           format: double
+          type: number

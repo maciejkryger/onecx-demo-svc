@@ -4,9 +4,9 @@ import java.util.List;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.core.Response;
 
 import org.jboss.resteasy.reactive.RestResponse;
@@ -41,12 +41,10 @@ public class ProductController implements ProductsV1Api {
 
     @Override
     public Response searchProducts(
-            Integer limit,
-            Integer offset,
-            ProductSearchCriteriaDTOV1 criteria) {
+            @Valid ProductSearchCriteriaDTOV1 criteria) {
 
         List<ProductDTOV1> result = service
-                .findByCriteria(mapper.toCriteria(criteria), offset, limit)
+                .findByCriteria(mapper.toCriteria(criteria))
                 .stream()
                 .map(mapper::toDto)
                 .toList();
@@ -62,10 +60,5 @@ public class ProductController implements ProductsV1Api {
     @ServerExceptionMapper
     public RestResponse<ProblemDetailResponseDTOV1> constraint(ConstraintViolationException ex) {
         return exceptionMapper.constraint(ex);
-    }
-
-    @ServerExceptionMapper
-    public RestResponse<ProblemDetailResponseDTOV1> daoException(OptimisticLockException ex) {
-        return exceptionMapper.optimisticLock(ex);
     }
 }

@@ -10,12 +10,11 @@ paths:
     post:
       tags:
        - productsInternal
-      operationId: createProduct
-      summary: Create Product
       security:
        -
         oauth2:
          - ocx-demo:write
+      operationId: createProduct
       requestBody:
         content:
           application/json:
@@ -23,47 +22,28 @@ paths:
               $ref: '#/components/schemas/Product'
         required: true
       responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-          description: Product created
         '400':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
           description: Validation failed
-        '409':
+        '201':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Constraint conflict
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Internal server error
+                $ref: '#/components/schemas/Product'
+          description: Product created
+      summary: Create Product
   /internal/products/{id}:
     get:
       tags:
        - productsInternal
-      operationId: getProductById
-      summary: Get Product by ID
       security:
        -
         oauth2:
          - ocx-demo:read
-      parameters:
-       -
-        name: id
-        in: path
-        required: true
-        schema:
-          type: string
+      operationId: getProductById
       responses:
         '200':
           content:
@@ -83,34 +63,58 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
           description: Product not found
-        '500':
+      parameters:
+       -
+        name: id
+        schema:
+          type: string
+        required: true
+        in: path
+      summary: Get Product by ID
+    delete:
+      tags:
+       - productsInternal
+      security:
+       -
+        oauth2:
+         - ocx-demo:delete
+      operationId: deleteProduct
+      responses:
+        '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Internal server error
-    put:
-      tags:
-       - productsInternal
-      operationId: updateProduct
-      summary: Update Product
-      security:
-       -
-        oauth2:
-         - ocx-demo:write
+          description: Product not found
+        '204':
+          description: Product deleted
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+          description: Invalid request
       parameters:
        -
         name: id
-        in: path
-        required: true
         schema:
           type: string
+        required: true
+        in: path
+      summary: Delete Product
+    put:
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Product'
         required: true
+      security:
+       -
+        oauth2:
+         - ocx-demo:write
+      tags:
+       - productsInternal
       responses:
         '200':
           content:
@@ -130,76 +134,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
           description: Product not found
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Optimistic lock conflict
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Internal server error
-    delete:
-      tags:
-       - productsInternal
-      operationId: deleteProduct
-      summary: Delete Product
-      security:
-       -
-        oauth2:
-         - ocx-demo:delete
+      summary: Update Product
+      operationId: updateProduct
       parameters:
        -
         name: id
-        in: path
-        required: true
         schema:
           type: string
-      responses:
-        '204':
-          description: Product deleted
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Invalid request
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Product not found
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Constraint conflict
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Internal server error
+        required: true
+        in: path
   /internal/products/search:
     post:
       tags:
        - productsInternal
-      operationId: searchProducts
-      summary: Search products
       security:
        -
         oauth2:
          - ocx-demo:read
-      parameters:
-       -
-        $ref: '#/components/parameters/limit'
-       -
-        $ref: '#/components/parameters/offset'
+      operationId: searchProducts
       requestBody:
         content:
           application/json:
@@ -207,26 +159,21 @@ paths:
               $ref: '#/components/schemas/ProductSearchCriteria'
         required: false
       responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Product'
-          description: Search result for products
         '400':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
           description: Validation failed
-        '500':
+        '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-          description: Internal server error
+                items:
+                  $ref: '#/components/schemas/Product'
+                type: array
+          description: Search result for products
+      summary: Search products
 components:
   securitySchemes:
     oauth2:
@@ -239,25 +186,6 @@ components:
             ocx-demo:read: Grants read access
             ocx-demo:write: Grants write access
             ocx-demo:delete: Grants access to delete operations
-  parameters:
-    limit:
-      in: query
-      name: limit
-      required: false
-      schema:
-        type: integer
-        format: int32
-        minimum: 1
-      description: Maximum number of items to return
-    offset:
-      in: query
-      name: offset
-      required: false
-      schema:
-        type: integer
-        format: int32
-        minimum: 0
-      description: Number of items to skip before starting to collect the result set
   schemas:
     ProblemDetailParam:
       type: object
@@ -298,6 +226,17 @@ components:
     CategorySearchCriteria:
       type: object
       properties:
+        pageNumber:
+          description: The number of page.
+          type: integer
+          default: 0
+          format: int32
+        pageSize:
+          default: 100
+          format: int32
+          type: integer
+          maximum: 1000
+          description: The size of page
         name:
           type: string
     Product:
@@ -308,15 +247,26 @@ components:
         name:
           type: string
         price:
-          type: number
           format: double
+          type: number
         category:
           $ref: '#/components/schemas/Category'
     ProductSearchCriteria:
       type: object
       properties:
+        pageNumber:
+          description: The number of page.
+          type: integer
+          default: 0
+          format: int32
+        pageSize:
+          default: 100
+          format: int32
+          type: integer
+          maximum: 1000
+          description: The size of page
         name:
           type: string
         price:
-          type: number
           format: double
+          type: number

@@ -14,7 +14,7 @@ public interface CategoryMapper {
     CategoryDTO toDto(Category entity);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "tenant", ignore = true)
+    @Mapping(target = "tenantId", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
     @Mapping(target = "creationUser", ignore = true)
     @Mapping(target = "modificationDate", ignore = true)
@@ -25,7 +25,7 @@ public interface CategoryMapper {
     Category fromDto(CategoryDTO dto);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "tenant", ignore = true)
+    @Mapping(target = "tenantId", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
     @Mapping(target = "creationUser", ignore = true)
     @Mapping(target = "modificationDate", ignore = true)

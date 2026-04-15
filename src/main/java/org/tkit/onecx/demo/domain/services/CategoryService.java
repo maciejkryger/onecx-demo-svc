@@ -23,8 +23,8 @@ public class CategoryService {
     @Inject
     CategoryMapper mapper;
 
-    public List<Category> findByCriteria(CategorySearchCriteriaDTO criteria, Integer offset, Integer limit) {
-        return dao.findByCriteria(criteria, offset, limit);
+    public List<Category> findByCriteria(CategorySearchCriteriaDTO criteria) {
+        return dao.findByCriteria(criteria);
     }
 
     public Category findById(String id) {

@@ -7,6 +7,7 @@ import jakarta.inject.Inject;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.core.Response;
 
 import org.jboss.resteasy.reactive.RestResponse;
@@ -35,7 +36,6 @@ public class ProductController implements ProductsInternalApi {
     ExceptionMapper exceptionMapper;
 
     @Override
-    @Transactional(Transactional.TxType.REQUIRED)
     public Response createProduct(ProductDTO dto) {
         var created = service.create(dto);
         return Response.status(Response.Status.CREATED)
@@ -49,30 +49,21 @@ public class ProductController implements ProductsInternalApi {
     }
 
     @Override
-    @Transactional(Transactional.TxType.REQUIRED)
     public Response updateProduct(String id, ProductDTO dto) {
         var updated = service.update(id, dto);
         return Response.ok(mapper.toDto(updated)).build();
     }
 
     @Override
-    @Transactional(Transactional.TxType.REQUIRED)
     public Response deleteProduct(String id) {
         service.delete(id);
         return Response.noContent().build();
     }
 
     @Override
-    public Response searchProducts(Integer limit, Integer offset, ProductSearchCriteriaDTO criteria) {
-        List<ProductDTO> result = service.findByCriteria(criteria, offset, limit)
-                .stream()
-                .map(mapper::toDto)
-                .toList();
-        return Response.ok(result).build();
-    }
-
-    public Response searchProducts(ProductSearchCriteriaDTO criteria, Integer limit, Integer offset) {
-        List<ProductDTO> result = service.findByCriteria(criteria, offset, limit)
+    public Response searchProducts(
+            @Valid ProductSearchCriteriaDTO criteria) {
+        List<ProductDTO> result = service.findByCriteria(criteria)
                 .stream()
                 .map(mapper::toDto)
                 .toList();
