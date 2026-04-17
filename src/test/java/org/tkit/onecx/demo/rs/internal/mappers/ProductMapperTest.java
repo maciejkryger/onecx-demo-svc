@@ -1,21 +1,64 @@
 package org.tkit.onecx.demo.rs.internal.mappers;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import jakarta.inject.Inject;
+
+import org.junit.jupiter.api.Test;
+import org.tkit.onecx.demo.domain.models.Product;
+
+import gen.org.tkit.onecx.demo.rs.internal.model.ProductDTO;
+import io.quarkus.test.junit.QuarkusTest;
+
+@QuarkusTest
 class ProductMapperTest {
 
+    @Inject
+    ProductMapper mapper;
+
     @Test
-    void shouldMapToDto() {
-        // TODO implement test
+    void shouldMapEntityToDto() {
+        Product entity = new Product();
+        entity.setName("test-value");
+        entity.setPrice(java.math.BigDecimal.ONE);
+
+        ProductDTO dto = mapper.toDto(entity);
+
+        assertNotNull(dto);
+        assertEquals("test-value", dto.getName());
+        assertEquals(1.0D, dto.getPrice());
+
     }
 
     @Test
-    void shouldMapFromDto() {
-        // TODO implement test
+    void shouldMapDtoToEntity() {
+        ProductDTO dto = new ProductDTO();
+        dto.setName("test-value");
+        dto.setPrice(1.0D);
+
+        Product entity = mapper.fromDto(dto);
+
+        assertNotNull(entity);
+        assertEquals("test-value", entity.getName());
+        assertEquals(0, entity.getPrice().compareTo(new java.math.BigDecimal("1.0")));
+
     }
 
     @Test
     void shouldUpdateEntityFromDto() {
-        // TODO implement test
+        Product entity = new Product();
+        entity.setName("test-value");
+        entity.setPrice(java.math.BigDecimal.ONE);
+
+        ProductDTO dto = new ProductDTO();
+        dto.setName("updated-value");
+        dto.setPrice(2.0D);
+
+        mapper.update(dto, entity);
+
+        assertEquals("updated-value", entity.getName());
+        assertEquals(0, entity.getPrice().compareTo(new java.math.BigDecimal("2.0")));
+
     }
 }

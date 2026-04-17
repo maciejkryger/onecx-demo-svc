@@ -14,10 +14,6 @@ quarkus.banner.enabled=false
 quarkus.hibernate-orm.database.generation=validate
 quarkus.hibernate-orm.metrics.enabled=true
 quarkus.hibernate-orm.jdbc.timezone=UTC
-quarkus.http.auth.permission.health.paths=/q/*
-quarkus.http.auth.permission.health.policy=permit
-quarkus.http.auth.permission.default.paths=/*
-quarkus.http.auth.permission.default.policy=authenticated
 quarkus.datasource.db-kind=postgresql
 quarkus.datasource.jdbc.max-size=30
 quarkus.datasource.jdbc.min-size=10
@@ -28,6 +24,13 @@ quarkus.datasource.metrics.enabled=true
 %prod.quarkus.datasource.password=${DB_PWD:onecx-demo-svc}
 quarkus.liquibase.migrate-at-start=true
 quarkus.liquibase.validate-on-migrate=true
+quarkus.http.auth.permission.health.paths=/q/*
+quarkus.http.auth.permission.health.policy=permit
+quarkus.http.auth.permission.default.paths=/*
+quarkus.http.auth.permission.default.policy=authenticated
+quarkus.hibernate-orm.multitenant=DISCRIMINATOR
+tkit.rs.context.tenant-id.enabled=true
+tkit.rs.context.token.header-param=apm-principal-token
 ----
 ====
 
