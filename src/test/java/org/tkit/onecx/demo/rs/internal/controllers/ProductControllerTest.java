@@ -325,6 +325,54 @@ class ProductControllerTest extends AbstractTest {
     }
 
     @Test
+    void createProductWithBlankCategoryIdShouldCreateNestedCategory() {
+        String request = """
+                {
+                  "name": "test-value",
+                  "price": 1.0,
+                  "category": {\n                    \"id\": \"\"\n                  }
+                }
+                """;
+
+        String entityId = given()
+                .auth().oauth2(token)
+                .header(APM_HEADER_PARAM, idToken)
+                .contentType(APPLICATION_JSON)
+                .body(request)
+                .when()
+                .post("/internal/products")
+                .then()
+                .statusCode(201)
+                .extract()
+                .path("id");
+
+        assertNotNull(entityId);
+    }
+
+    @Test
+    void updateProductWithBlankCategoryIdShouldCreateNestedCategory() {
+        String entityId = createProductAndReturnId();
+
+        String request = """
+                {
+                  "name": "updated-value",
+                  "price": 2.0,
+                  "category": {\n                    \"id\": \"\"\n                  }
+                }
+                """;
+
+        given()
+                .auth().oauth2(token)
+                .header(APM_HEADER_PARAM, idToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(request)
+                .when()
+                .put("/internal/products/{id}", entityId)
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
     void searchProductsWithEmptyCriteriaShouldUseDefaults() {
         createProductAndReturnId();
 
@@ -448,6 +496,35 @@ class ProductControllerTest extends AbstractTest {
                   "pageNumber": 0,
                   "pageSize": 0,
                   "price": 1234.56
+                }
+                """;
+
+        List<?> result = given()
+                .auth().oauth2(token)
+                .header(APM_HEADER_PARAM, idToken)
+                .contentType(APPLICATION_JSON)
+                .body(criteria)
+                .when()
+                .post("/internal/products/search")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .jsonPath()
+                .getList("$");
+
+        assertNotNull(result);
+        assertTrue(result.size() >= 1);
+    }
+
+    @Test
+    void searchProductsWithNullFieldsShouldReturnAll() {
+        createProductAndReturnId();
+
+        String criteria = """
+                {
+                  "pageNumber": 0,
+                  "pageSize": 100
                 }
                 """;
 
