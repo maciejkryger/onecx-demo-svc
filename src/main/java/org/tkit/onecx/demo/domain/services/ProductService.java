@@ -62,6 +62,7 @@ public class ProductService {
         Product entity = findById(id);
         mapper.update(dto, entity);
         if (dto.getCategory() != null) {
+            entity.setCategory(null);
             if (dto.getCategory().getId() != null && !dto.getCategory().getId().isBlank()) {
                 Category resolvedCategory = categoryDAO.findById(dto.getCategory().getId());
                 entity.setCategory(resolvedCategory);

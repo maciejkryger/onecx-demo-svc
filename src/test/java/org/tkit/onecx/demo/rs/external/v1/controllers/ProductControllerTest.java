@@ -2,10 +2,22 @@ package org.tkit.onecx.demo.rs.external.v1.controllers;
 
 import static io.restassured.RestAssured.given;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import jakarta.inject.Inject;
+import jakarta.persistence.OptimisticLockException;
+import jakarta.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.tkit.onecx.demo.AbstractTest;
+import org.tkit.quarkus.jpa.exceptions.ConstraintException;
 import org.tkit.quarkus.security.test.GenerateKeycloakClient;
 
 import gen.org.tkit.onecx.demo.rs.external.v1.model.ProductSearchCriteriaDTOV1;
@@ -19,6 +31,9 @@ class ProductControllerTest extends AbstractTest {
     String token;
     String idToken;
 
+    @Inject
+    ProductController controller;
+
     @BeforeEach
     void setup() {
         token = keycloakClient.getClientAccessToken("productExternalTestClient");
@@ -26,8 +41,8 @@ class ProductControllerTest extends AbstractTest {
     }
 
     @Test
-    void getProductByIdTest() {
-        String id = createProductAndReturnId();
+    void getById_shouldReturn200() {
+        String id = createInternalEntity();
 
         given()
                 .auth().oauth2(token)
@@ -39,27 +54,136 @@ class ProductControllerTest extends AbstractTest {
     }
 
     @Test
-    void searchProductsTest() {
-        createProductAndReturnId();
+    void search_shouldCoverAllBranches() {
+        createInternalEntity();
 
-        ProductSearchCriteriaDTOV1 request = new ProductSearchCriteriaDTOV1();
-        request.setPageNumber(0);
-        request.setPageSize(10);
-        request.setName("test-value");
-        request.setPrice(1.0D);
+        ProductSearchCriteriaDTOV1 criteria = new ProductSearchCriteriaDTOV1();
 
         given()
                 .auth().oauth2(token)
                 .header(APM_HEADER_PARAM, idToken)
                 .contentType(APPLICATION_JSON)
-                .body(request)
+                .body(criteria)
                 .when()
                 .post("/v1/products/search")
                 .then()
                 .statusCode(200);
     }
 
-    private String createProductAndReturnId() {
+    @Test
+    void shouldMapConstraintException() {
+        ConstraintException ex = mock(ConstraintException.class, RETURNS_DEEP_STUBS);
+        when(ex.getMessage()).thenReturn("constraint");
+        when(ex.getConstraints()).thenReturn("constraint");
+        when(ex.getMessageKey().name()).thenReturn("CONSTRAINT_VIOLATIONS");
+
+        assertEquals(400, controller.exception(ex).getStatus());
+    }
+
+    @Test
+    void shouldMapConstraintViolationException() {
+        var ex = new ConstraintViolationException(java.util.Collections.emptySet());
+
+        assertEquals(400, controller.constraint(ex).getStatus());
+    }
+
+    @Test
+    void shouldMapOptimisticLockException() {
+        var ex = new OptimisticLockException("optimistic");
+
+        assertEquals(409, controller.daoException(ex).getStatus());
+    }
+
+    @Test
+    void getProductByIdMissingShouldThrowNoSuchElementException() {
+        assertThrows(NoSuchElementException.class, () -> controller.getProductById("missing-product-id"));
+    }
+
+    @Test
+    void searchProductsWithEmptyCriteriaShouldUseDefaults() {
+        createInternalEntity();
+
+        String criteria = """
+                {
+                }
+                """;
+
+        List<?> result = given()
+                .auth().oauth2(token)
+                .header(APM_HEADER_PARAM, idToken)
+                .contentType(APPLICATION_JSON)
+                .body(criteria)
+                .when()
+                .post("/v1/products/search")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .jsonPath()
+                .getList("$");
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void searchProductsWithBlankNameShouldNotUsePredicate() {
+        createInternalEntity();
+
+        String criteria = """
+                {
+                  "pageNumber": 0,
+                  "pageSize": 10,
+                  "name": "   "
+                }
+                """;
+
+        List<?> result = given()
+                .auth().oauth2(token)
+                .header(APM_HEADER_PARAM, idToken)
+                .contentType(APPLICATION_JSON)
+                .body(criteria)
+                .when()
+                .post("/v1/products/search")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .jsonPath()
+                .getList("$");
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void searchProductsByPriceShouldUsePredicateAndNormalizeZeroPageSize() {
+        createInternalEntity();
+
+        String criteria = """
+                {
+                  "pageNumber": 0,
+                  "pageSize": 0,
+                  "price": 1234.56
+                }
+                """;
+
+        List<?> result = given()
+                .auth().oauth2(token)
+                .header(APM_HEADER_PARAM, idToken)
+                .contentType(APPLICATION_JSON)
+                .body(criteria)
+                .when()
+                .post("/v1/products/search")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .jsonPath()
+                .getList("$");
+
+        assertNotNull(result);
+    }
+
+    private String createInternalEntity() {
         ProductDTO request = new ProductDTO();
         request.setName("test-value");
         request.setPrice(1.0D);
@@ -76,4 +200,5 @@ class ProductControllerTest extends AbstractTest {
                 .extract()
                 .path("id");
     }
+
 }

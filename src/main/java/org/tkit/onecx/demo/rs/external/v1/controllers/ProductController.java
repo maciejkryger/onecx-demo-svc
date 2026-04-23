@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
@@ -12,7 +13,7 @@ import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestResponse;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 import org.tkit.onecx.demo.domain.services.ProductService;
-import org.tkit.onecx.demo.rs.external.v1.mappers.ExceptionMapper;
+import org.tkit.onecx.demo.rs.external.v1.mappers.ExternalExceptionMapper;
 import org.tkit.onecx.demo.rs.external.v1.mappers.ProductMapper;
 import org.tkit.quarkus.jpa.exceptions.ConstraintException;
 
@@ -32,7 +33,7 @@ public class ProductController implements ProductsV1Api {
     ProductMapper mapper;
 
     @Inject
-    ExceptionMapper exceptionMapper;
+    ExternalExceptionMapper exceptionMapper;
 
     @Override
     public Response getProductById(String id) {
@@ -60,5 +61,10 @@ public class ProductController implements ProductsV1Api {
     @ServerExceptionMapper
     public RestResponse<ProblemDetailResponseDTOV1> constraint(ConstraintViolationException ex) {
         return exceptionMapper.constraint(ex);
+    }
+
+    @ServerExceptionMapper
+    public RestResponse<ProblemDetailResponseDTOV1> daoException(OptimisticLockException ex) {
+        return exceptionMapper.optimisticLock(ex);
     }
 }

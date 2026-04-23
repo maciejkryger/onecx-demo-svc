@@ -13,7 +13,7 @@ import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestResponse;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 import org.tkit.onecx.demo.domain.services.ProductService;
-import org.tkit.onecx.demo.rs.internal.mappers.ExceptionMapper;
+import org.tkit.onecx.demo.rs.internal.mappers.InternalExceptionMapper;
 import org.tkit.onecx.demo.rs.internal.mappers.ProductMapper;
 import org.tkit.quarkus.jpa.exceptions.ConstraintException;
 
@@ -33,7 +33,7 @@ public class ProductController implements ProductsInternalApi {
     ProductMapper mapper;
 
     @Inject
-    ExceptionMapper exceptionMapper;
+    InternalExceptionMapper exceptionMapper;
 
     @Override
     public Response createProduct(ProductDTO dto) {
