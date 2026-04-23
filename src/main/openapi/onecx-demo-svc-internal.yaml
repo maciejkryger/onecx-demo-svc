@@ -217,16 +217,16 @@ components:
       type: object
       properties:
         pageNumber:
-          type: integer
           default: 0
           format: int32
           description: The number of page.
+          type: integer
         pageSize:
-          format: int32
           type: integer
           maximum: 1000
           description: The size of page
           default: 100
+          format: int32
         name:
           type: string
     Product:
@@ -245,16 +245,16 @@ components:
       type: object
       properties:
         pageNumber:
-          type: integer
           default: 0
           format: int32
           description: The number of page.
+          type: integer
         pageSize:
-          format: int32
           type: integer
           maximum: 1000
           description: The size of page
           default: 100
+          format: int32
         name:
           type: string
         price:
