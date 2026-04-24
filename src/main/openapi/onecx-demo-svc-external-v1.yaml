@@ -14,11 +14,11 @@ paths:
       operationId: getProductById
       parameters:
        -
+        required: true
         schema:
           type: string
-        required: true
-        in: path
         name: id
+        in: path
       responses:
         '200':
           description: Product found
@@ -58,9 +58,7 @@ paths:
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/Product'
-                type: array
+                $ref: '#/components/schemas/ProductPageResult'
         '400':
           description: Validation failed
           content:
@@ -122,18 +120,37 @@ components:
       type: object
       properties:
         pageNumber:
+          format: int32
           default: 0
-          format: int32
+          type: integer
           description: The number of page.
-          type: integer
         pageSize:
-          type: integer
           maximum: 1000
-          description: The size of page
-          default: 100
+          type: integer
           format: int32
+          default: 100
+          description: The size of page
         name:
           type: string
+    CategoryPageResult:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        number:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        stream:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
     Product:
       type: object
       properties:
@@ -142,26 +159,45 @@ components:
         name:
           type: string
         price:
-          format: double
           type: number
+          format: double
         category:
           $ref: '#/components/schemas/Category'
     ProductSearchCriteria:
       type: object
       properties:
         pageNumber:
+          format: int32
           default: 0
-          format: int32
+          type: integer
           description: The number of page.
-          type: integer
         pageSize:
-          type: integer
           maximum: 1000
-          description: The size of page
-          default: 100
+          type: integer
           format: int32
+          default: 100
+          description: The size of page
         name:
           type: string
         price:
-          format: double
           type: number
+          format: double
+    ProductPageResult:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        number:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        stream:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'

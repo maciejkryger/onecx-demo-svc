@@ -1,7 +1,5 @@
 package org.tkit.onecx.demo.rs.internal.controllers;
 
-import java.util.List;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.OptimisticLockException;
@@ -63,11 +61,8 @@ public class ProductController implements ProductsInternalApi {
     @Override
     public Response searchProducts(
             @Valid ProductSearchCriteriaDTO criteria) {
-        List<ProductDTO> result = service.findByCriteria(criteria)
-                .stream()
-                .map(mapper::toDto)
-                .toList();
-        return Response.ok(result).build();
+        var result = service.findByCriteria(criteria);
+        return Response.ok(mapper.toPageResultDto(result)).build();
     }
 
     @ServerExceptionMapper

@@ -71,6 +71,41 @@ class ProductControllerTest extends AbstractTest {
     }
 
     @Test
+    void searchWithExplicitPageNumberAndSizeShouldSucceed() {
+        createInternalEntity();
+
+        ProductSearchCriteriaDTOV1 criteria = new ProductSearchCriteriaDTOV1();
+        criteria.setPageNumber(2);
+        criteria.setPageSize(5);
+
+        given()
+                .auth().oauth2(token)
+                .header(APM_HEADER_PARAM, idToken)
+                .contentType(APPLICATION_JSON)
+                .body(criteria)
+                .when()
+                .post("/v1/products/search")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    void searchWithNullBodyShouldTriggerDaoCatchAndReturnError() {
+        createInternalEntity();
+
+        int status = given()
+                .auth().oauth2(token)
+                .header(APM_HEADER_PARAM, idToken)
+                .when()
+                .post("/v1/products/search")
+                .then()
+                .extract()
+                .statusCode();
+
+        assertTrue(status >= 400);
+    }
+
+    @Test
     void shouldMapConstraintException() {
         ConstraintException ex = mock(ConstraintException.class, RETURNS_DEEP_STUBS);
         when(ex.getMessage()).thenReturn("constraint");
@@ -120,7 +155,7 @@ class ProductControllerTest extends AbstractTest {
                 .extract()
                 .body()
                 .jsonPath()
-                .getList("$");
+                .getList("stream");
 
         assertNotNull(result);
     }
@@ -149,7 +184,7 @@ class ProductControllerTest extends AbstractTest {
                 .extract()
                 .body()
                 .jsonPath()
-                .getList("$");
+                .getList("stream");
 
         assertNotNull(result);
     }
@@ -178,7 +213,7 @@ class ProductControllerTest extends AbstractTest {
                 .extract()
                 .body()
                 .jsonPath()
-                .getList("$");
+                .getList("stream");
 
         assertNotNull(result);
     }
@@ -200,5 +235,8 @@ class ProductControllerTest extends AbstractTest {
                 .extract()
                 .path("id");
     }
+
+    // DAO exception test moved to a dedicated DAO test in the DAO package because
+    // getEntityManager() has protected access and must be referenced from the DAO package.
 
 }
