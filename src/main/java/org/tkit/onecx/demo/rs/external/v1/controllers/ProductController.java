@@ -44,9 +44,8 @@ public class ProductController implements ProductsV1Api {
     public Response searchProducts(
             @Valid ProductSearchCriteriaDTOV1 criteria) {
 
-        List<ProductDTOV1> result = service
-                .findByCriteria(mapper.toCriteria(criteria))
-                .stream()
+        var pageResult = service.findByCriteria(mapper.toCriteria(criteria));
+        List<ProductDTOV1> result = pageResult.getStream()
                 .map(mapper::toDto)
                 .toList();
 

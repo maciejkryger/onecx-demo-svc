@@ -1,6 +1,5 @@
 package org.tkit.onecx.demo.domain.services;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -12,6 +11,7 @@ import org.tkit.onecx.demo.domain.daos.ProductDAO;
 import org.tkit.onecx.demo.domain.models.Category;
 import org.tkit.onecx.demo.domain.models.Product;
 import org.tkit.onecx.demo.rs.internal.mappers.ProductMapper;
+import org.tkit.quarkus.jpa.daos.PageResult;
 
 import gen.org.tkit.onecx.demo.rs.internal.model.ProductDTO;
 import gen.org.tkit.onecx.demo.rs.internal.model.ProductSearchCriteriaDTO;
@@ -28,7 +28,7 @@ public class ProductService {
     @Inject
     CategoryDAO categoryDAO;
 
-    public List<Product> findByCriteria(ProductSearchCriteriaDTO criteria) {
+    public PageResult<Product> findByCriteria(ProductSearchCriteriaDTO criteria) {
         return dao.findByCriteria(criteria);
     }
 

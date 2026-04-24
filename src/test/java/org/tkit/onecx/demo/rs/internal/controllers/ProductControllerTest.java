@@ -21,6 +21,7 @@ import jakarta.ws.rs.core.MediaType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.tkit.onecx.demo.AbstractTest;
+import org.tkit.onecx.demo.domain.daos.ProductDAO;
 import org.tkit.quarkus.jpa.exceptions.ConstraintException;
 import org.tkit.quarkus.security.test.GenerateKeycloakClient;
 
@@ -38,6 +39,9 @@ class ProductControllerTest extends AbstractTest {
 
     @Inject
     ProductController controller;
+
+    @Inject
+    ProductDAO dao;
 
     @BeforeEach
     void setup() {
@@ -124,6 +128,37 @@ class ProductControllerTest extends AbstractTest {
                 .post("/internal/products/search")
                 .then()
                 .statusCode(200);
+    }
+
+    @Test
+    void searchWithExplicitPageNumberAndSizeShouldSucceed() {
+        ProductSearchCriteriaDTO criteria = new ProductSearchCriteriaDTO();
+        criteria.setPageNumber(1);
+        criteria.setPageSize(5);
+
+        given()
+                .auth().oauth2(token)
+                .header(APM_HEADER_PARAM, idToken)
+                .contentType(APPLICATION_JSON)
+                .body(criteria)
+                .when()
+                .post("/internal/products/search")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    void searchWithNullBodyShouldTriggerDaoCatchAndReturnError() {
+        int status = given()
+                .auth().oauth2(token)
+                .header(APM_HEADER_PARAM, idToken)
+                .when()
+                .post("/internal/products/search")
+                .then()
+                .extract()
+                .statusCode();
+
+        assertTrue(status >= 400);
     }
 
     @Test
@@ -393,7 +428,7 @@ class ProductControllerTest extends AbstractTest {
                 .extract()
                 .body()
                 .jsonPath()
-                .getList("$");
+                .getList("stream");
 
         assertNotNull(result);
     }
@@ -437,7 +472,7 @@ class ProductControllerTest extends AbstractTest {
                 .extract()
                 .body()
                 .jsonPath()
-                .getList("$");
+                .getList("stream");
 
         assertNotNull(result);
         assertTrue(result.size() >= 1);
@@ -467,7 +502,7 @@ class ProductControllerTest extends AbstractTest {
                 .extract()
                 .body()
                 .jsonPath()
-                .getList("$");
+                .getList("stream");
 
         assertNotNull(result);
     }
@@ -511,7 +546,7 @@ class ProductControllerTest extends AbstractTest {
                 .extract()
                 .body()
                 .jsonPath()
-                .getList("$");
+                .getList("stream");
 
         assertNotNull(result);
         assertTrue(result.size() >= 1);
@@ -540,7 +575,7 @@ class ProductControllerTest extends AbstractTest {
                 .extract()
                 .body()
                 .jsonPath()
-                .getList("$");
+                .getList("stream");
 
         assertNotNull(result);
         assertTrue(result.size() >= 1);
