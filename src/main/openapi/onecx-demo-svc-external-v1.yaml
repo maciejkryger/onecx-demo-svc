@@ -14,11 +14,11 @@ paths:
       operationId: getProductById
       parameters:
        -
+        name: id
+        in: path
         required: true
         schema:
           type: string
-        name: id
-        in: path
       responses:
         '200':
           description: Product found
@@ -120,16 +120,16 @@ components:
       type: object
       properties:
         pageNumber:
+          description: The number of page.
           format: int32
           default: 0
           type: integer
-          description: The number of page.
         pageSize:
-          maximum: 1000
-          type: integer
           format: int32
           default: 100
           description: The size of page
+          maximum: 1000
+          type: integer
         name:
           type: string
     CategoryPageResult:
@@ -167,16 +167,16 @@ components:
       type: object
       properties:
         pageNumber:
+          description: The number of page.
           format: int32
           default: 0
           type: integer
-          description: The number of page.
         pageSize:
-          maximum: 1000
-          type: integer
           format: int32
           default: 100
           description: The size of page
+          maximum: 1000
+          type: integer
         name:
           type: string
         price:

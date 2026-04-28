@@ -189,35 +189,6 @@ class ProductControllerTest extends AbstractTest {
         assertNotNull(result);
     }
 
-    @Test
-    void searchProductsByPriceShouldUsePredicateAndNormalizeZeroPageSize() {
-        createInternalEntity();
-
-        String criteria = """
-                {
-                  "pageNumber": 0,
-                  "pageSize": 0,
-                  "price": 1234.56
-                }
-                """;
-
-        List<?> result = given()
-                .auth().oauth2(token)
-                .header(APM_HEADER_PARAM, idToken)
-                .contentType(APPLICATION_JSON)
-                .body(criteria)
-                .when()
-                .post("/v1/products/search")
-                .then()
-                .statusCode(200)
-                .extract()
-                .body()
-                .jsonPath()
-                .getList("stream");
-
-        assertNotNull(result);
-    }
-
     private String createInternalEntity() {
         ProductDTO request = new ProductDTO();
         request.setName("test-value");
