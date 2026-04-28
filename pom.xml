@@ -6,12 +6,14 @@
     <parent>
         <groupId>org.tkit.onecx</groupId>
         <artifactId>onecx-quarkus3-parent</artifactId>
-        <version>2.5.0</version>
+        <version>3.1.0</version>
     </parent>
 
     <groupId>org.tkit.onecx</groupId>
     <artifactId>onecx-demo-svc</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>999-SNAPSHOT</version>
+    <packaging>quarkus</packaging>
+    
     <name>onecx-demo-svc</name>
     <description>onecx-demo-svc - OneCX Backend Service</description>
 
@@ -118,12 +120,12 @@
         <!-- Tests -->
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-junit5</artifactId>
+            <artifactId>quarkus-junit</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-junit5-mockito</artifactId>
+            <artifactId>quarkus-junit-mockito</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -212,26 +214,6 @@
                             <modelNameSuffix>DTOV1</modelNameSuffix>
                             <apiNameSuffix>V1Api</apiNameSuffix>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>jacoco-prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>jacoco-report</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>

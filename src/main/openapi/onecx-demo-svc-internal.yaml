@@ -41,11 +41,11 @@ paths:
       operationId: getProductById
       parameters:
        -
-        name: id
         in: path
         required: true
         schema:
           type: string
+        name: id
       responses:
         '200':
           description: Product found
@@ -74,11 +74,11 @@ paths:
       operationId: updateProduct
       parameters:
        -
-        name: id
         in: path
         required: true
         schema:
           type: string
+        name: id
       requestBody:
         required: true
         content:
@@ -113,11 +113,11 @@ paths:
       operationId: deleteProduct
       parameters:
        -
-        name: id
         in: path
         required: true
         schema:
           type: string
+        name: id
       responses:
         '204':
           description: Product deleted
@@ -220,11 +220,11 @@ components:
           default: 0
           type: integer
         pageSize:
-          format: int32
           default: 100
           description: The size of page
           maximum: 1000
           type: integer
+          format: int32
         name:
           type: string
     CategoryPageResult:
@@ -267,11 +267,11 @@ components:
           default: 0
           type: integer
         pageSize:
-          format: int32
           default: 100
           description: The size of page
           maximum: 1000
           type: integer
+          format: int32
         name:
           type: string
         price:
