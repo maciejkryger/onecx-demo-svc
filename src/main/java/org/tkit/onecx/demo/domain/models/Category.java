@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "category")
+@Table(name = "CATEGORY")
 @Getter
 @Setter
 public class Category extends TraceableEntity {

@@ -15,7 +15,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "product")
+@Table(name = "PRODUCT")
 @Getter
 @Setter
 public class Product extends TraceableEntity {
@@ -29,7 +29,7 @@ public class Product extends TraceableEntity {
     @Column(name = "PRICE")
     private BigDecimal price;
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "CATEGORY_ID")
     private org.tkit.onecx.demo.domain.models.Category category;
 
 }

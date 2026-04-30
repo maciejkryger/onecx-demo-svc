@@ -7,7 +7,6 @@ import jakarta.inject.Inject;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Valid;
 import jakarta.ws.rs.core.Response;
 
 import org.jboss.resteasy.reactive.RestResponse;
@@ -36,13 +35,12 @@ public class ProductController implements ProductsV1Api {
     ExternalExceptionMapper exceptionMapper;
 
     @Override
-    public Response getProductById(String id) {
+    public Response getProductByIdV1(String id) {
         return Response.ok(mapper.toDto(service.findById(id))).build();
     }
 
     @Override
-    public Response searchProducts(
-            @Valid ProductSearchCriteriaDTOV1 criteria) {
+    public Response searchProductsV1(ProductSearchCriteriaDTOV1 criteria) {
 
         var pageResult = service.findByCriteria(mapper.toCriteria(criteria));
         List<ProductDTOV1> result = pageResult.getStream()

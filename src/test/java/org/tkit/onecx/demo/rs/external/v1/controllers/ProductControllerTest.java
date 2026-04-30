@@ -131,7 +131,7 @@ class ProductControllerTest extends AbstractTest {
 
     @Test
     void getProductByIdMissingShouldThrowNoSuchElementException() {
-        assertThrows(NoSuchElementException.class, () -> controller.getProductById("missing-product-id"));
+        assertThrows(NoSuchElementException.class, () -> controller.getProductByIdV1("missing-product-id"));
     }
 
     @Test
