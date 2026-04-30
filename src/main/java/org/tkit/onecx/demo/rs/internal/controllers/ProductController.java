@@ -5,7 +5,6 @@ import jakarta.inject.Inject;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Valid;
 import jakarta.ws.rs.core.Response;
 
 import org.jboss.resteasy.reactive.RestResponse;
@@ -59,8 +58,7 @@ public class ProductController implements ProductsInternalApi {
     }
 
     @Override
-    public Response searchProducts(
-            @Valid ProductSearchCriteriaDTO criteria) {
+    public Response searchProducts(ProductSearchCriteriaDTO criteria) {
         var result = service.findByCriteria(criteria);
         return Response.ok(mapper.toPageResultDto(result)).build();
     }

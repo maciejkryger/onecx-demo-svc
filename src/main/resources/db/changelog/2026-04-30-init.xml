@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <changeSet author="dev (generated)" id="1777463689293-1">
+    <changeSet author="dev (generated)" id="1777540153194-1">
         <createTable tableName="category">
             <column name="optlock" type="INTEGER">
                 <constraints nullable="false"/>
@@ -18,7 +18,7 @@
             <column name="modificationuser" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet author="dev (generated)" id="1777463689293-2">
+    <changeSet author="dev (generated)" id="1777540153194-2">
         <createTable tableName="product">
             <column name="optlock" type="INTEGER">
                 <constraints nullable="false"/>
@@ -26,6 +26,7 @@
             <column name="price" type="numeric(38, 2)"/>
             <column name="creationdate" type="TIMESTAMP WITHOUT TIME ZONE"/>
             <column name="modificationdate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="category_id" type="VARCHAR(255)"/>
             <column name="guid" type="VARCHAR(255)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="product_pkey"/>
             </column>
@@ -33,12 +34,11 @@
             <column name="tenant_id" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="category_id" type="VARCHAR(255)"/>
             <column name="creationuser" type="VARCHAR(255)"/>
             <column name="modificationuser" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet author="dev (generated)" id="1777463689293-3">
-        <addForeignKeyConstraint baseColumnNames="category_id" baseTableName="product" constraintName="fk1mtsbur82frn64de7balymq9s" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="guid" referencedTableName="category" validate="true"/>
+    <changeSet author="dev (generated)" id="1777540153194-3">
+        <addForeignKeyConstraint baseColumnNames="category_id" baseTableName="product" constraintName="fk5cc8odoxoyxjqs3sagp5p1fk9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="guid" referencedTableName="category" validate="true"/>
     </changeSet>
 </databaseChangeLog>
