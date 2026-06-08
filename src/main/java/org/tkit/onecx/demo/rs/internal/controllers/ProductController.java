@@ -9,6 +9,8 @@ import jakarta.ws.rs.core.Response;
 
 import org.jboss.resteasy.reactive.RestResponse;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
+import org.tkit.onecx.demo.domain.daos.ProductDAO;
+import org.tkit.onecx.demo.domain.models.Product;
 import org.tkit.onecx.demo.domain.services.ProductService;
 import org.tkit.onecx.demo.rs.internal.mappers.InternalExceptionMapper;
 import org.tkit.onecx.demo.rs.internal.mappers.ProductMapper;
@@ -32,6 +34,9 @@ public class ProductController implements ProductsInternalApi {
     @Inject
     InternalExceptionMapper exceptionMapper;
 
+    @Inject
+    ProductDAO dao;
+
     @Override
     public Response createProduct(ProductDTO dto) {
         var created = service.create(dto);
@@ -42,24 +47,35 @@ public class ProductController implements ProductsInternalApi {
 
     @Override
     public Response getProductById(String id) {
-        return Response.ok(mapper.toDto(service.findById(id))).build();
+        Product product = dao.findById(id);
+        if (product == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(mapper.toDto(product)).build();
     }
 
     @Override
     public Response updateProduct(String id, ProductDTO dto) {
         var updated = service.update(id, dto);
+        if (updated == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
         return Response.ok(mapper.toDto(updated)).build();
     }
 
     @Override
     public Response deleteProduct(String id) {
-        service.delete(id);
+        Product product = dao.findById(id);
+        if (product == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        dao.deleteQueryById(id);
         return Response.noContent().build();
     }
 
     @Override
     public Response searchProducts(ProductSearchCriteriaDTO criteria) {
-        var result = service.findByCriteria(criteria);
+        var result = dao.findByCriteria(criteria);
         return Response.ok(mapper.toPageResultDto(result)).build();
     }
 

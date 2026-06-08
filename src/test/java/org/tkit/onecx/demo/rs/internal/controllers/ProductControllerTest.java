@@ -2,16 +2,12 @@ package org.tkit.onecx.demo.rs.internal.controllers;
 
 import static io.restassured.RestAssured.given;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import jakarta.inject.Inject;
 import jakarta.persistence.OptimisticLockException;
@@ -81,6 +77,19 @@ class ProductControllerTest extends AbstractTest {
     }
 
     @Test
+    void getProductByIdNotFoundTest() {
+        String id = "non-existing-id";
+
+        given()
+                .auth().oauth2(token)
+                .header(APM_HEADER_PARAM, idToken)
+                .when()
+                .get("/internal/products/{id}", id)
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
     void updateProductTest() {
         String id = createProductAndReturnId();
 
@@ -100,6 +109,25 @@ class ProductControllerTest extends AbstractTest {
     }
 
     @Test
+    void updateProductNotFoundTest() {
+        String id = "non-existing-id";
+
+        ProductDTO request = new ProductDTO();
+        request.setName("updated-value");
+        request.setPrice(2.0D);
+
+        given()
+                .auth().oauth2(token)
+                .header(APM_HEADER_PARAM, idToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(request)
+                .when()
+                .put("/internal/products/{id}", id)
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
     void deleteProductTest() {
         String id = createProductAndReturnId();
 
@@ -110,6 +138,19 @@ class ProductControllerTest extends AbstractTest {
                 .delete("/internal/products/{id}", id)
                 .then()
                 .statusCode(204);
+    }
+
+    @Test
+    void deleteProductNotFoundTest() {
+        String id = "non-existing-id";
+
+        given()
+                .auth().oauth2(token)
+                .header(APM_HEADER_PARAM, idToken)
+                .when()
+                .delete("/internal/products/{id}", id)
+                .then()
+                .statusCode(404);
     }
 
     @Test
@@ -160,11 +201,6 @@ class ProductControllerTest extends AbstractTest {
                 .statusCode();
 
         assertTrue(status >= 400);
-    }
-
-    @Test
-    void getProductByIdMissingShouldThrowNoSuchElementException() {
-        assertThrows(NoSuchElementException.class, () -> controller.getProductById("missing-product-id"));
     }
 
     @Test

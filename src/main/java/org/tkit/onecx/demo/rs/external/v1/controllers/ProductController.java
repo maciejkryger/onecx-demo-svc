@@ -1,7 +1,5 @@
 package org.tkit.onecx.demo.rs.external.v1.controllers;
 
-import java.util.List;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.OptimisticLockException;
@@ -11,6 +9,7 @@ import jakarta.ws.rs.core.Response;
 
 import org.jboss.resteasy.reactive.RestResponse;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
+import org.tkit.onecx.demo.domain.daos.ProductDAO;
 import org.tkit.onecx.demo.domain.services.ProductService;
 import org.tkit.onecx.demo.rs.external.v1.mappers.ExternalExceptionMapper;
 import org.tkit.onecx.demo.rs.external.v1.mappers.ProductMapper;
@@ -18,7 +17,6 @@ import org.tkit.quarkus.jpa.exceptions.ConstraintException;
 
 import gen.org.tkit.onecx.demo.rs.external.v1.ProductsV1Api;
 import gen.org.tkit.onecx.demo.rs.external.v1.model.ProblemDetailResponseDTOV1;
-import gen.org.tkit.onecx.demo.rs.external.v1.model.ProductDTOV1;
 import gen.org.tkit.onecx.demo.rs.external.v1.model.ProductSearchCriteriaDTOV1;
 
 @ApplicationScoped
@@ -34,20 +32,20 @@ public class ProductController implements ProductsV1Api {
     @Inject
     ExternalExceptionMapper exceptionMapper;
 
+    @Inject
+    ProductDAO dao;
+
     @Override
     public Response getProductByIdV1(String id) {
-        return Response.ok(mapper.toDto(service.findById(id))).build();
+        return Response.ok(mapper.toDto(dao.findById(id))).build();
     }
 
     @Override
     public Response searchProductsV1(ProductSearchCriteriaDTOV1 criteria) {
 
-        var pageResult = service.findByCriteria(mapper.toCriteria(criteria));
-        List<ProductDTOV1> result = pageResult.getStream()
-                .map(mapper::toDto)
-                .toList();
+        var pageResult = dao.findByCriteria(mapper.toCriteria(criteria));
 
-        return Response.ok(result).build();
+        return Response.ok(mapper.mapPageResult(pageResult)).build();
     }
 
     @ServerExceptionMapper

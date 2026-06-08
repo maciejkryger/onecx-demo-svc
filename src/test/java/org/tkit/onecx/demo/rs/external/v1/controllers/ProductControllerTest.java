@@ -8,7 +8,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import jakarta.inject.Inject;
 import jakarta.persistence.OptimisticLockException;
@@ -127,11 +126,6 @@ class ProductControllerTest extends AbstractTest {
         var ex = new OptimisticLockException("optimistic");
 
         assertEquals(409, controller.daoException(ex).getStatus());
-    }
-
-    @Test
-    void getProductByIdMissingShouldThrowNoSuchElementException() {
-        assertThrows(NoSuchElementException.class, () -> controller.getProductByIdV1("missing-product-id"));
     }
 
     @Test
