@@ -13,6 +13,7 @@ import gen.org.tkit.onecx.demo.rs.internal.model.ProductSearchCriteriaDTO;
 
 @Mapper(uses = { OffsetDateTimeMapper.class })
 public interface ProductMapper {
+
     ProductDTOV1 toDto(Product entity);
 
     ProductSearchCriteriaDTO toCriteria(ProductSearchCriteriaDTOV1 criteria);

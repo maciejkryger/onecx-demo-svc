@@ -24,12 +24,16 @@ import gen.org.tkit.onecx.demo.rs.internal.model.ProductSearchCriteriaDTO;
 @ApplicationScoped
 @Transactional(Transactional.TxType.NOT_SUPPORTED)
 public class ProductController implements ProductsInternalApi {
+
     @Inject
     ProductService service;
+
     @Inject
     ProductMapper mapper;
+
     @Inject
     InternalExceptionMapper exceptionMapper;
+
     @Inject
     ProductDAO dao;
 

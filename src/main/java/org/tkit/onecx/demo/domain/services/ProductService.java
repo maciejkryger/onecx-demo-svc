@@ -13,8 +13,10 @@ import gen.org.tkit.onecx.demo.rs.internal.model.ProductDTO;
 
 @ApplicationScoped
 public class ProductService {
+
     @Inject
     ProductDAO dao;
+
     @Inject
     ProductMapper mapper;
     @Inject
