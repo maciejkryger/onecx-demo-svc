@@ -22,16 +22,12 @@ import gen.org.tkit.onecx.demo.rs.external.v1.model.ProductSearchCriteriaDTOV1;
 @ApplicationScoped
 @Transactional(Transactional.TxType.NOT_SUPPORTED)
 public class ProductController implements ProductsV1Api {
-
     @Inject
     ProductService service;
-
     @Inject
     ProductMapper mapper;
-
     @Inject
     ExternalExceptionMapper exceptionMapper;
-
     @Inject
     ProductDAO dao;
 
@@ -42,9 +38,7 @@ public class ProductController implements ProductsV1Api {
 
     @Override
     public Response searchProductsV1(ProductSearchCriteriaDTOV1 criteria) {
-
         var pageResult = dao.findByCriteria(mapper.toCriteria(criteria));
-
         return Response.ok(mapper.mapPageResult(pageResult)).build();
     }
 

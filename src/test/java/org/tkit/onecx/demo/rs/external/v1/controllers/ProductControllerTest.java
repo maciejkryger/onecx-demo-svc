@@ -26,10 +26,8 @@ import io.quarkus.test.junit.QuarkusTest;
 @QuarkusTest
 @GenerateKeycloakClient(clientName = "productExternalTestClient", scopes = { "ocx-demo:read", "ocx-demo:write" })
 class ProductControllerTest extends AbstractTest {
-
     String token;
     String idToken;
-
     @Inject
     ProductController controller;
 
@@ -42,7 +40,6 @@ class ProductControllerTest extends AbstractTest {
     @Test
     void getById_shouldReturn200() {
         String id = createInternalEntity();
-
         given()
                 .auth().oauth2(token)
                 .header(APM_HEADER_PARAM, idToken)
@@ -55,9 +52,7 @@ class ProductControllerTest extends AbstractTest {
     @Test
     void search_shouldCoverAllBranches() {
         createInternalEntity();
-
         ProductSearchCriteriaDTOV1 criteria = new ProductSearchCriteriaDTOV1();
-
         given()
                 .auth().oauth2(token)
                 .header(APM_HEADER_PARAM, idToken)
@@ -72,11 +67,9 @@ class ProductControllerTest extends AbstractTest {
     @Test
     void searchWithExplicitPageNumberAndSizeShouldSucceed() {
         createInternalEntity();
-
         ProductSearchCriteriaDTOV1 criteria = new ProductSearchCriteriaDTOV1();
         criteria.setPageNumber(2);
         criteria.setPageSize(5);
-
         given()
                 .auth().oauth2(token)
                 .header(APM_HEADER_PARAM, idToken)
@@ -91,7 +84,6 @@ class ProductControllerTest extends AbstractTest {
     @Test
     void searchWithNullBodyShouldTriggerDaoCatchAndReturnError() {
         createInternalEntity();
-
         int status = given()
                 .auth().oauth2(token)
                 .header(APM_HEADER_PARAM, idToken)
@@ -100,8 +92,30 @@ class ProductControllerTest extends AbstractTest {
                 .then()
                 .extract()
                 .statusCode();
-
         assertTrue(status >= 400);
+    }
+
+    @Test
+    void searchWithEmptyCriteriaShouldUseDefaults() {
+        createInternalEntity();
+        String criteria = """
+                {
+                }
+                """;
+        List<?> result = given()
+                .auth().oauth2(token)
+                .header(APM_HEADER_PARAM, idToken)
+                .contentType(APPLICATION_JSON)
+                .body(criteria)
+                .when()
+                .post("/v1/products/search")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .jsonPath()
+                .getList("stream");
+        assertNotNull(result);
     }
 
     @Test
@@ -110,22 +124,24 @@ class ProductControllerTest extends AbstractTest {
         when(ex.getMessage()).thenReturn("constraint");
         when(ex.getConstraints()).thenReturn("constraint");
         when(ex.getMessageKey().name()).thenReturn("CONSTRAINT_VIOLATIONS");
-
         assertEquals(400, controller.exception(ex).getStatus());
     }
 
     @Test
     void shouldMapConstraintViolationException() {
         var ex = new ConstraintViolationException(java.util.Collections.emptySet());
-
         assertEquals(400, controller.constraint(ex).getStatus());
     }
 
     @Test
     void shouldMapOptimisticLockException() {
         var ex = new OptimisticLockException("optimistic");
-
         assertEquals(409, controller.daoException(ex).getStatus());
+    }
+
+    @Test
+    void getProductByIdMissingShouldThrowNoSuchElementException() {
+        assertThrows(NoSuchElementException.class, () -> controller.getProductByIdV1("missing-product-id"));
     }
 
     @Test
@@ -200,7 +216,6 @@ class ProductControllerTest extends AbstractTest {
                 .extract()
                 .path("id");
     }
-
     // DAO exception test moved to a dedicated DAO test in the DAO package because
     // getEntityManager() has protected access and must be referenced from the DAO package.
 

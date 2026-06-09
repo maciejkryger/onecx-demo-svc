@@ -30,13 +30,10 @@ import io.restassured.response.Response;
 @GenerateKeycloakClient(clientName = "productInternalTestClient", scopes = { "ocx-demo:read", "ocx-demo:write",
         "ocx-demo:delete" })
 class ProductControllerTest extends AbstractTest {
-
     String token;
     String idToken;
-
     @Inject
     ProductController controller;
-
     @Inject
     ProductDAO dao;
 
@@ -66,7 +63,6 @@ class ProductControllerTest extends AbstractTest {
     @Test
     void getProductByIdTest() {
         String id = createProductAndReturnId();
-
         given()
                 .auth().oauth2(token)
                 .header(APM_HEADER_PARAM, idToken)
@@ -79,7 +75,6 @@ class ProductControllerTest extends AbstractTest {
     @Test
     void getProductByIdNotFoundTest() {
         String id = "non-existing-id";
-
         given()
                 .auth().oauth2(token)
                 .header(APM_HEADER_PARAM, idToken)
@@ -92,7 +87,6 @@ class ProductControllerTest extends AbstractTest {
     @Test
     void updateProductTest() {
         String id = createProductAndReturnId();
-
         ProductDTO request = new ProductDTO();
         request.setName("updated-value");
         request.setPrice(2.0D);
@@ -111,7 +105,6 @@ class ProductControllerTest extends AbstractTest {
     @Test
     void updateProductNotFoundTest() {
         String id = "non-existing-id";
-
         ProductDTO request = new ProductDTO();
         request.setName("updated-value");
         request.setPrice(2.0D);
@@ -130,7 +123,6 @@ class ProductControllerTest extends AbstractTest {
     @Test
     void deleteProductTest() {
         String id = createProductAndReturnId();
-
         given()
                 .auth().oauth2(token)
                 .header(APM_HEADER_PARAM, idToken)
@@ -143,7 +135,6 @@ class ProductControllerTest extends AbstractTest {
     @Test
     void deleteProductNotFoundTest() {
         String id = "non-existing-id";
-
         given()
                 .auth().oauth2(token)
                 .header(APM_HEADER_PARAM, idToken)
@@ -177,7 +168,6 @@ class ProductControllerTest extends AbstractTest {
         ProductSearchCriteriaDTO criteria = new ProductSearchCriteriaDTO();
         criteria.setPageNumber(1);
         criteria.setPageSize(5);
-
         given()
                 .auth().oauth2(token)
                 .header(APM_HEADER_PARAM, idToken)
@@ -199,8 +189,61 @@ class ProductControllerTest extends AbstractTest {
                 .then()
                 .extract()
                 .statusCode();
-
         assertTrue(status >= 400);
+    }
+
+    @Test
+    void searchWithEmptyCriteriaShouldUseDefaults() {
+        createProductAndReturnId();
+        String criteria = """
+                {
+                }
+                """;
+        List<?> result = given()
+                .auth().oauth2(token)
+                .header(APM_HEADER_PARAM, idToken)
+                .contentType(APPLICATION_JSON)
+                .body(criteria)
+                .when()
+                .post("/internal/products/search")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .jsonPath()
+                .getList("stream");
+        assertNotNull(result);
+    }
+
+    @Test
+    void searchWithNullFieldsShouldReturnAll() {
+        createProductAndReturnId();
+        String criteria = """
+                {
+                  "pageNumber": 0,
+                  "pageSize": 100
+                }
+                """;
+        List<?> result = given()
+                .auth().oauth2(token)
+                .header(APM_HEADER_PARAM, idToken)
+                .contentType(APPLICATION_JSON)
+                .body(criteria)
+                .when()
+                .post("/internal/products/search")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .jsonPath()
+                .getList("stream");
+        assertNotNull(result);
+        assertTrue(result.size() >= 1);
+    }
+
+    @Test
+    void getProductByIdMissingShouldThrowNoSuchElementException() {
+        assertThrows(NoSuchElementException.class, () -> controller.getProductById("missing-product-id"));
     }
 
     @Test
@@ -565,9 +608,7 @@ class ProductControllerTest extends AbstractTest {
         when(ex.getMessage()).thenReturn("constraint");
         when(ex.getConstraints()).thenReturn("constraint");
         when(ex.getMessageKey().name()).thenReturn("CONSTRAINT_VIOLATIONS");
-
         var response = controller.exception(ex);
-
         assertNotNull(response);
         assertEquals(400, response.getStatus());
     }
@@ -575,9 +616,7 @@ class ProductControllerTest extends AbstractTest {
     @Test
     void shouldMapConstraintViolationExceptionWithRealMapper() {
         ConstraintViolationException ex = new ConstraintViolationException(java.util.Collections.emptySet());
-
         var response = controller.constraint(ex);
-
         assertNotNull(response);
         assertEquals(400, response.getStatus());
     }
@@ -585,9 +624,7 @@ class ProductControllerTest extends AbstractTest {
     @Test
     void shouldMapOptimisticLockExceptionWithRealMapper() {
         OptimisticLockException ex = new OptimisticLockException("optimistic-lock");
-
         var response = controller.daoException(ex);
-
         assertNotNull(response);
         assertEquals(400, response.getStatus());
     }

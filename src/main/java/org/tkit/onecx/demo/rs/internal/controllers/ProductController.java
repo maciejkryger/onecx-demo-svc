@@ -24,16 +24,12 @@ import gen.org.tkit.onecx.demo.rs.internal.model.ProductSearchCriteriaDTO;
 @ApplicationScoped
 @Transactional(Transactional.TxType.NOT_SUPPORTED)
 public class ProductController implements ProductsInternalApi {
-
     @Inject
     ProductService service;
-
     @Inject
     ProductMapper mapper;
-
     @Inject
     InternalExceptionMapper exceptionMapper;
-
     @Inject
     ProductDAO dao;
 
@@ -47,11 +43,11 @@ public class ProductController implements ProductsInternalApi {
 
     @Override
     public Response getProductById(String id) {
-        Product product = dao.findById(id);
-        if (product == null) {
+        Product entity = dao.findById(id);
+        if (entity == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(mapper.toDto(product)).build();
+        return Response.ok(mapper.toDto(entity)).build();
     }
 
     @Override
@@ -65,8 +61,8 @@ public class ProductController implements ProductsInternalApi {
 
     @Override
     public Response deleteProduct(String id) {
-        Product product = dao.findById(id);
-        if (product == null) {
+        Product entity = dao.findById(id);
+        if (entity == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         dao.deleteQueryById(id);
