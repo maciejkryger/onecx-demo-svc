@@ -1,7 +1,7 @@
 package org.tkit.onecx.demo.rs.internal.mappers;
 
-import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.tkit.onecx.demo.domain.models.Product;
 import org.tkit.quarkus.jpa.daos.PageResult;
@@ -13,22 +13,53 @@ import gen.org.tkit.onecx.demo.rs.internal.model.ProductPageResultDTO;
 @Mapper(uses = { OffsetDateTimeMapper.class })
 public interface ProductMapper {
 
-    @BeanMapping(ignoreByDefault = true)
     ProductDTO toDto(Product entity);
 
-    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "removeStreamItem", ignore = true)
     ProductPageResultDTO toPageResultDto(PageResult<Product> page);
 
-    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "tenantId", ignore = true)
+    @Mapping(target = "creationDate", ignore = true)
+    @Mapping(target = "creationUser", ignore = true)
+    @Mapping(target = "modificationDate", ignore = true)
+    @Mapping(target = "modificationUser", ignore = true)
+    @Mapping(target = "controlTraceabilityManual", ignore = true)
+    @Mapping(target = "modificationCount", ignore = true)
+    @Mapping(target = "persisted", ignore = true)
     Product fromDto(ProductDTO dto);
 
-    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "tenantId", ignore = true)
+    @Mapping(target = "creationDate", ignore = true)
+    @Mapping(target = "creationUser", ignore = true)
+    @Mapping(target = "modificationDate", ignore = true)
+    @Mapping(target = "modificationUser", ignore = true)
+    @Mapping(target = "controlTraceabilityManual", ignore = true)
+    @Mapping(target = "modificationCount", ignore = true)
+    @Mapping(target = "persisted", ignore = true)
     void update(ProductDTO dto, @MappingTarget Product entity);
 
-    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "tenantId", ignore = true)
+    @Mapping(target = "creationDate", ignore = true)
+    @Mapping(target = "creationUser", ignore = true)
+    @Mapping(target = "modificationDate", ignore = true)
+    @Mapping(target = "modificationUser", ignore = true)
+    @Mapping(target = "controlTraceabilityManual", ignore = true)
+    @Mapping(target = "modificationCount", ignore = true)
+    @Mapping(target = "persisted", ignore = true)
     org.tkit.onecx.demo.domain.models.Category fromDto(gen.org.tkit.onecx.demo.rs.internal.model.CategoryDTO dto);
 
-    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "tenantId", ignore = true)
+    @Mapping(target = "creationDate", ignore = true)
+    @Mapping(target = "creationUser", ignore = true)
+    @Mapping(target = "modificationDate", ignore = true)
+    @Mapping(target = "modificationUser", ignore = true)
+    @Mapping(target = "controlTraceabilityManual", ignore = true)
+    @Mapping(target = "modificationCount", ignore = true)
+    @Mapping(target = "persisted", ignore = true)
     void update(gen.org.tkit.onecx.demo.rs.internal.model.CategoryDTO dto,
             @org.mapstruct.MappingTarget org.tkit.onecx.demo.domain.models.Category entity);
 
