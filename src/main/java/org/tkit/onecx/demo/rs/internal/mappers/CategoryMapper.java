@@ -1,9 +1,7 @@
 package org.tkit.onecx.demo.rs.internal.mappers;
 
-import java.util.stream.Collectors;
-
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.tkit.onecx.demo.domain.models.Category;
 import org.tkit.quarkus.jpa.daos.PageResult;
@@ -15,38 +13,16 @@ import gen.org.tkit.onecx.demo.rs.internal.model.CategoryPageResultDTO;
 @Mapper(uses = { OffsetDateTimeMapper.class })
 public interface CategoryMapper {
 
+    @BeanMapping(ignoreByDefault = true)
     CategoryDTO toDto(Category entity);
 
-    default CategoryPageResultDTO toPageResultDto(PageResult<Category> page) {
-        CategoryPageResultDTO dto = new CategoryPageResultDTO();
-        dto.setStream(page.getStream().map(this::toDto).collect(Collectors.toList()));
-        dto.setTotalElements(page.getTotalElements());
-        dto.setNumber((int) page.getNumber());
-        dto.setSize((int) page.getSize());
-        dto.setTotalPages((int) page.getTotalPages());
-        return dto;
-    }
+    @BeanMapping(ignoreByDefault = true)
+    CategoryPageResultDTO toPageResultDto(PageResult<Category> page);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "tenantId", ignore = true)
-    @Mapping(target = "creationDate", ignore = true)
-    @Mapping(target = "creationUser", ignore = true)
-    @Mapping(target = "modificationDate", ignore = true)
-    @Mapping(target = "modificationUser", ignore = true)
-    @Mapping(target = "controlTraceabilityManual", ignore = true)
-    @Mapping(target = "modificationCount", ignore = true)
-    @Mapping(target = "persisted", ignore = true)
+    @BeanMapping(ignoreByDefault = true)
     Category fromDto(CategoryDTO dto);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "tenantId", ignore = true)
-    @Mapping(target = "creationDate", ignore = true)
-    @Mapping(target = "creationUser", ignore = true)
-    @Mapping(target = "modificationDate", ignore = true)
-    @Mapping(target = "modificationUser", ignore = true)
-    @Mapping(target = "controlTraceabilityManual", ignore = true)
-    @Mapping(target = "modificationCount", ignore = true)
-    @Mapping(target = "persisted", ignore = true)
+    @BeanMapping(ignoreByDefault = true)
     void update(CategoryDTO dto, @MappingTarget Category entity);
 
 }
