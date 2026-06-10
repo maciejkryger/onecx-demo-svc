@@ -42,9 +42,7 @@ public class ProductController implements ProductsV1Api {
 
     @Override
     public Response searchProductsV1(ProductSearchCriteriaDTOV1 criteria) {
-
         var pageResult = dao.findByCriteria(mapper.toCriteria(criteria));
-
         return Response.ok(mapper.mapPageResult(pageResult)).build();
     }
 
