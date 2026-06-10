@@ -28,9 +28,7 @@ public class ProductDAO extends AbstractDAO<Product> {
 
             List<Predicate> predicates = new ArrayList<>();
 
-            if (criteria.getName() != null && !criteria.getName().isBlank()) {
-                addSearchStringPredicate(predicates, cb, root.get(Product_.NAME), criteria.getName());
-            }
+            addSearchStringPredicate(predicates, cb, root.get(Product_.NAME), criteria.getName());
 
             if (!predicates.isEmpty()) {
                 cq.where(cb.and(predicates.toArray(new Predicate[0])));

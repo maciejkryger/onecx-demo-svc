@@ -3,7 +3,8 @@ info:
   title: onecx-demo-svc API
   version: 1.0.0
 servers:
- - url: http://onecx-demo-svc:8080
+ -
+  url: http://onecx-demo-svc:8080/api
 paths:
   /v1/products/{id}:
     get:
