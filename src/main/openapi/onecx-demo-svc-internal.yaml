@@ -42,10 +42,10 @@ paths:
       parameters:
        -
         name: id
+        in: path
+        required: true
         schema:
           type: string
-        required: true
-        in: path
       responses:
         '200':
           description: Product found
@@ -75,10 +75,10 @@ paths:
       parameters:
        -
         name: id
+        in: path
+        required: true
         schema:
           type: string
-        required: true
-        in: path
       requestBody:
         required: true
         content:
@@ -114,10 +114,10 @@ paths:
       parameters:
        -
         name: id
+        in: path
+        required: true
         schema:
           type: string
-        required: true
-        in: path
       responses:
         '204':
           description: Product deleted
@@ -215,33 +215,33 @@ components:
       type: object
       properties:
         pageNumber:
+          type: integer
+          format: int32
           description: The number of page.
-          type: integer
           default: 0
-          format: int32
         pageSize:
-          default: 100
-          format: int32
           type: integer
-          maximum: 1000
+          format: int32
           description: The size of page
+          default: 100
+          maximum: 1000
         name:
           type: string
     CategoryPageResult:
       type: object
       properties:
         totalElements:
+          type: integer
           format: int64
-          type: integer
         totalPages:
-          format: int32
           type: integer
+          format: int32
         number:
-          format: int32
           type: integer
+          format: int32
         size:
-          format: int32
           type: integer
+          format: int32
         stream:
           type: array
           items:
@@ -254,44 +254,44 @@ components:
         name:
           type: string
         price:
-          format: double
           type: number
+          format: double
         category:
           $ref: '#/components/schemas/Category'
     ProductSearchCriteria:
       type: object
       properties:
         pageNumber:
+          type: integer
+          format: int32
           description: The number of page.
-          type: integer
           default: 0
-          format: int32
         pageSize:
-          default: 100
-          format: int32
           type: integer
-          maximum: 1000
+          format: int32
           description: The size of page
+          default: 100
+          maximum: 1000
         name:
           type: string
         price:
-          format: double
           type: number
+          format: double
     ProductPageResult:
       type: object
       properties:
         totalElements:
+          type: integer
           format: int64
-          type: integer
         totalPages:
-          format: int32
           type: integer
+          format: int32
         number:
-          format: int32
           type: integer
+          format: int32
         size:
-          format: int32
           type: integer
+          format: int32
         stream:
           type: array
           items:

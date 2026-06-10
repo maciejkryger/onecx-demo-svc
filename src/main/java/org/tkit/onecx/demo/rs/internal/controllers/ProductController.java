@@ -47,11 +47,11 @@ public class ProductController implements ProductsInternalApi {
 
     @Override
     public Response getProductById(String id) {
-        Product entity = dao.findById(id);
-        if (entity == null) {
+        Product product = dao.findById(id);
+        if (product == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(mapper.toDto(entity)).build();
+        return Response.ok(mapper.toDto(product)).build();
     }
 
     @Override
@@ -65,8 +65,8 @@ public class ProductController implements ProductsInternalApi {
 
     @Override
     public Response deleteProduct(String id) {
-        Product entity = dao.findById(id);
-        if (entity == null) {
+        Product product = dao.findById(id);
+        if (product == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         dao.deleteQueryById(id);
