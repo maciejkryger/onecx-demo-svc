@@ -509,7 +509,7 @@ class ProductControllerTest extends AbstractTest {
                 }
                 """;
 
-        io.restassured.response.Response response = given()
+        Response response = given()
                 .auth().oauth2(token)
                 .header(APM_HEADER_PARAM, idToken)
                 .contentType(APPLICATION_JSON)
