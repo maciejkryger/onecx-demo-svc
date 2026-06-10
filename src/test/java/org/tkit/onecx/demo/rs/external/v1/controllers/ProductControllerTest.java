@@ -124,7 +124,6 @@ class ProductControllerTest extends AbstractTest {
     @Test
     void shouldMapOptimisticLockException() {
         var ex = new OptimisticLockException("optimistic");
-
         assertEquals(409, controller.daoException(ex).getStatus());
     }
 
@@ -200,7 +199,6 @@ class ProductControllerTest extends AbstractTest {
                 .extract()
                 .path("id");
     }
-
     // DAO exception test moved to a dedicated DAO test in the DAO package because
     // getEntityManager() has protected access and must be referenced from the DAO package.
 
