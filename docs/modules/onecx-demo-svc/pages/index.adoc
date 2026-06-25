@@ -1,0 +1,7 @@
+include::onecx-demo-svc-attributes.adoc[opts=optional]
+
+= onecx-demo-svc
+
+
+
+include::onecx-demo-svc-docs.adoc[opts=optional]

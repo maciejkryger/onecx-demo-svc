@@ -1,0 +1,17 @@
+app:
+  name: onecx-demo-svc
+  image:
+    repository: "onecx/onecx-demo-svc"
+  db:
+    enabled: true
+  operator:
+    keycloak:
+      client:
+        enabled: true
+        spec:
+          kcConfig:
+            defaultClientScopes: [ ocx-demo:read ]
+    microservice:
+      spec:
+        description: "onecx-demo-svc - OneCX backend service"
+        name: "onecx-demo-svc"

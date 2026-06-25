@@ -1,0 +1,203 @@
+openapi: 3.0.3
+info:
+  title: onecx-demo-svc API
+  version: 1.0.0
+servers:
+ -
+  url: http://onecx-demo-svc:8080/api
+paths:
+  /v1/products/{id}:
+    get:
+      tags:
+       - products
+      description: Get Product by ID
+      operationId: getProductByIdV1
+      parameters:
+       -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Product found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+      security:
+       - oauth2: [ ocx-demo:all, ocx-demo:read ]
+  /v1/products/search:
+    post:
+      tags:
+       - products
+      description: Search products
+      operationId: searchProductsV1
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductSearchCriteria'
+      responses:
+        '200':
+          description: Search result for products
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPageResult'
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+      security:
+       - oauth2: [ ocx-demo:all, ocx-demo:read ]
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.simple.api/token
+          scopes:
+            ocx-demo:all: Grants access to all operations
+            ocx-demo:read: Grants read access
+            ocx-demo:write: Grants write access
+            ocx-demo:delete: Grants access to delete operations
+  schemas:
+    ProblemDetailParam:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+    ProblemDetailInvalidParam:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
+    ProblemDetailResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        detail:
+          type: string
+        params:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemDetailParam'
+        invalidParams:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemDetailInvalidParam'
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    CategorySearchCriteria:
+      type: object
+      properties:
+        pageNumber:
+          description: The number of page.
+          format: int32
+          default: 0
+          type: integer
+        pageSize:
+          format: int32
+          default: 100
+          description: The size of page
+          maximum: 1000
+          type: integer
+        name:
+          type: string
+    CategoryPageResult:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        number:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        stream:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+          format: double
+        category:
+          $ref: '#/components/schemas/Category'
+    ProductSearchCriteria:
+      type: object
+      properties:
+        pageNumber:
+          description: The number of page.
+          format: int32
+          default: 0
+          type: integer
+        pageSize:
+          format: int32
+          default: 100
+          description: The size of page
+          maximum: 1000
+          type: integer
+        name:
+          type: string
+        price:
+          type: number
+          format: double
+    ProductPageResult:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        number:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        stream:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
