@@ -16,6 +16,13 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "PRODUCT")
+@jakarta.persistence.AttributeOverrides({
+        @jakarta.persistence.AttributeOverride(name = "creationDate", column = @jakarta.persistence.Column(name = "CREATION_DATE")),
+        @jakarta.persistence.AttributeOverride(name = "creationUser", column = @jakarta.persistence.Column(name = "CREATION_USER")),
+        @jakarta.persistence.AttributeOverride(name = "modificationDate", column = @jakarta.persistence.Column(name = "MODIFICATION_DATE")),
+        @jakarta.persistence.AttributeOverride(name = "modificationUser", column = @jakarta.persistence.Column(name = "MODIFICATION_USER"))
+})
+
 @Getter
 @Setter
 public class Product extends TraceableEntity {

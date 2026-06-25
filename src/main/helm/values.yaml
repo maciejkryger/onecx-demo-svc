@@ -1,5 +1,5 @@
 app:
-  name: svc
+  name: onecx-demo-svc
   image:
     repository: "onecx/onecx-demo-svc"
   db:
@@ -13,5 +13,5 @@ app:
             defaultClientScopes: [ ocx-demo:read ]
     microservice:
       spec:
-        description: "OneCX backend service"
+        description: "onecx-demo-svc - OneCX backend service"
         name: "onecx-demo-svc"
