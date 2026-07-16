@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <changeSet author="dev (generated)" id="1782397121778-1">
+    <changeSet author="dev (generated)" id="1784205446223-1">
         <createTable tableName="category">
             <column name="optlock" type="INTEGER">
                 <constraints nullable="false"/>
@@ -18,7 +18,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="dev (generated)" id="1782397121778-2">
+    <changeSet author="dev (generated)" id="1784205446223-2">
         <createTable tableName="product">
             <column name="optlock" type="INTEGER">
                 <constraints nullable="false"/>
@@ -38,7 +38,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="dev (generated)" id="1782397121778-3">
+    <changeSet author="dev (generated)" id="1784205446223-3">
         <addForeignKeyConstraint baseColumnNames="category_id" baseTableName="product" constraintName="fk5cc8odoxoyxjqs3sagp5p1fk9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="guid" referencedTableName="category" validate="true"/>
     </changeSet>
 </databaseChangeLog>
